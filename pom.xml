@@ -5,13 +5,26 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.hebaibai</groupId>
-    <artifactId>jdbcPlus</artifactId>
+    <artifactId>JdbcPlus</artifactId>
     <version>1.1.0-RELEASE</version>
-    <name>jdbcPlus</name>
+    <name>JdbcPlus</name>
 
     <properties>
         <spring.jdbc.version>4.2.9.RELEASE</spring.jdbc.version>
     </properties>
+
+    <distributionManagement>
+        <repository>
+            <id>releases</id>
+            <name>deployment</name>
+            <url>http://10.168.10.199:18081/nexus/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>deployment</name>
+            <url>http://10.168.10.199:18081/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <dependencies>
 
@@ -51,6 +64,7 @@
     </dependencies>
 
     <build>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -59,6 +73,19 @@
                     <source>1.7</source>
                     <target>1.7</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
