@@ -29,6 +29,5 @@ public class PlusColumnMapRowMapper extends ColumnMapRowMapper {
             e.printStackTrace();
         }
         return columnValue;
-
     }
 }

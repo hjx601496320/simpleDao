@@ -18,6 +18,7 @@ import java.util.Map;
  * @author hjx
  */
 public class EntityUtils {
+
     static final String IS_NOT_TABLE = "Class 不是一个Table";
     static final String IS_NOT_COLUMN = "field 不是一个Column";
     static final String CLASS_NOT_NULL = "class 不能为 null";
@@ -57,44 +58,6 @@ public class EntityUtils {
         return columnName(idField);
     }
 
-    public static String idFieldName(Class<?> clz) {
-        Assert.isTrue(isTable(clz), IS_NOT_TABLE);
-        Field idField = idField(clz);
-        //entity中不存在@Id注解时，忽略。
-        if (idField == null) {
-            return null;
-        }
-        return idField.getName();
-    }
-
-    public static List<String> fieldNames(Class<?> clz) {
-        Assert.isTrue(isTable(clz), IS_NOT_TABLE);
-        List<String> fieldNames = new ArrayList<>();
-        for (Field field : clz.getDeclaredFields()) {
-            if (isColumn(field)) {
-                fieldNames.add(field.getName());
-            }
-        }
-        return fieldNames;
-    }
-
-    /**
-     * 获取Table的字段名与Entity属性名的映射Map
-     *
-     * @param clz
-     * @param <T>
-     * @return
-     */
-    public static <T> Map<String, String> columnFieldNameMap(Class<T> clz) {
-        Assert.isTrue(isTable(clz), IS_NOT_TABLE);
-        Map<String, Field> stringFieldMap = columnFieldMap(clz);
-        Map<String, String> map = new HashMap<>(stringFieldMap.size());
-        for (Map.Entry<String, Field> entry : stringFieldMap.entrySet()) {
-            map.put(entry.getKey(), entry.getValue().getName());
-        }
-        return map;
-    }
-
     /**
      * 获取Table的列名与Entity属性的映射Map
      *
@@ -111,46 +74,6 @@ public class EntityUtils {
             }
         }
         return map;
-    }
-
-    /**
-     * 设置值
-     *
-     * @param target 要从哪一个对象中取值
-     * @param field  要取这个对象的那个属性的值
-     * @param value  要设置的值
-     * @return
-     */
-    public static boolean setValue(Object target, Field field, Object value) {
-        Assert.notNull(target);
-        Assert.notNull(field);
-        field.setAccessible(true);
-        try {
-            field.set(target, value);
-            return true;
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    /**
-     * 取值
-     *
-     * @param target 要从哪一个对象中取值
-     * @param field  要取这个对象的那个属性的值
-     * @return
-     */
-    public static Object getValue(Object target, Field field) {
-        Assert.notNull(target);
-        Assert.notNull(field);
-        field.setAccessible(true);
-        try {
-            return field.get(target);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     /**
@@ -192,7 +115,6 @@ public class EntityUtils {
         return getAnnotation(clz, Table.class).name();
     }
 
-
     /**
      * 获取列的名称
      *
@@ -229,7 +151,6 @@ public class EntityUtils {
         }
         return false;
     }
-
 
     /**
      * 是否是一个id

@@ -1,10 +1,10 @@
 package com.hebaibai.jdbcplus.maker.insert;
 
-import com.hebaibai.jdbcplus.util.EntityUtils;
-import com.hebaibai.jdbcplus.util.StringUtils;
 import com.hebaibai.jdbcplus.maker.AbstractSqlMaker;
 import com.hebaibai.jdbcplus.maker.SqlMaker;
 import com.hebaibai.jdbcplus.maker.Where;
+import com.hebaibai.jdbcplus.util.ClassUtils;
+import com.hebaibai.jdbcplus.util.StringUtils;
 import org.springframework.util.Assert;
 
 import java.lang.reflect.Field;
@@ -42,7 +42,7 @@ public class DefaultInsert extends AbstractSqlMaker implements Insert {
         insertColumns = new ArrayList(columnFieldMapper.size());
         for (Map.Entry<String, Field> stringFieldEntry : columnFieldMapper.entrySet()) {
             Field field = stringFieldEntry.getValue();
-            Object value = EntityUtils.getValue(entity, field);
+            Object value = ClassUtils.getValue(entity, field);
             if (value == null) {
                 continue;
             }

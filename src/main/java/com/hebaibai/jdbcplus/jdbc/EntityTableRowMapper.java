@@ -1,5 +1,6 @@
 package com.hebaibai.jdbcplus.jdbc;
 
+import com.hebaibai.jdbcplus.util.ClassUtils;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.util.Assert;
@@ -73,7 +74,7 @@ public class EntityTableRowMapper<T> implements RowMapper<T> {
     @Override
     public T mapRow(ResultSet resultSet, int rowNum) throws SQLException {
         Map<String, Object> resultMap = columnMapRowMapper.mapRow(resultSet, rowNum);
-        T instance = getInstance(tableClass);
+        Object instance = ClassUtils.getInstance(tableClass);
         for (Map.Entry<String, Object> entry : resultMap.entrySet()) {
             //数据库字段名
             String key = entry.getKey();
@@ -86,50 +87,11 @@ public class EntityTableRowMapper<T> implements RowMapper<T> {
             }
             //数据库字段值
             Object value = entry.getValue();
-            setFieldValue(instance, declaredField, value);
+            ClassUtils.setValue(instance, declaredField, value);
         }
-        return instance;
+        return (T) instance;
     }
 
-    /**
-     * 实例化泛型对象
-     *
-     * @param aClass
-     * @return
-     */
-    private T getInstance(Class<T> aClass) {
-        Assert.notNull(aClass);
-        try {
-            T t = aClass.newInstance();
-            return t;
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        throw new RuntimeException("实例化对象失败");
-    }
-
-    /**
-     * 给 entityClass 中的 field 设置值
-     *
-     * @param t
-     * @param field
-     * @param value
-     * @return
-     */
-    boolean setFieldValue(T t, Field field, Object value) {
-        field.setAccessible(true);
-        try {
-            if (value != null) {
-                field.set(t, value);
-                return true;
-            }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
 
     public Map<String, Field> getColumnFieldMapper() {
         return columnFieldMapper;

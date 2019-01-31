@@ -180,7 +180,9 @@ public abstract class AbstractSqlMaker implements SqlMaker {
                 if (i != 0) {
                     sql.append(where.getConnect());
                 }
-                sql.append(StringUtils.append(where.getSql().replace(Where.PLACEHOLDER, getColumnName(where.getColumn()))));
+                String columnName = getColumnName(where.getColumn());
+                String realSql = where.getSql().replace(Where.PLACEHOLDER, columnName);
+                sql.append(realSql);
             }
         }
         return sql.toString();

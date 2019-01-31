@@ -1,5 +1,6 @@
 package com.hebaibai.jdbcplus;
 
+import com.hebaibai.jdbcplus.entity.Foo;
 import com.hebaibai.jdbcplus.entity.User;
 import com.hebaibai.jdbcplus.jdbc.JdbcTest;
 import com.hebaibai.jdbcplus.maker.Wheres;
@@ -114,7 +115,6 @@ public class JdbcPlusTest extends JdbcTest {
 
     @Test
     public void updateById1() {
-
         for (int i = 0; i < 10; i++) {
             User user = new User();
             user.setMark("markUpdate");
@@ -146,5 +146,18 @@ public class JdbcPlusTest extends JdbcTest {
                 "user_name", "hebaibai"
         );
         System.out.println(deleteBy);
+    }
+
+    @Test
+    public void selectOne() {
+        List<Foo> foos = jdbcPlus.selectBySql("select * from tbl_accesscore_log limit 1, 2", Foo.class);
+        for (Foo foo : foos) {
+            System.out.println(foo);
+        }
+
+        List<Foo> foos2 = jdbcPlus.selectBySql("select * from tbl_accesscore_log limit ?, ?", new Object[]{1, 10}, Foo.class);
+        for (Foo foo : foos2) {
+            System.out.println(foo);
+        }
     }
 }
