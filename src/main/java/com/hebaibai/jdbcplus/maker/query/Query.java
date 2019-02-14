@@ -8,7 +8,7 @@ import com.hebaibai.jdbcplus.maker.SqlMaker;
  * @author hjx
  */
 public interface Query extends SqlMaker {
-    
+
     /**
      * 排序
      *

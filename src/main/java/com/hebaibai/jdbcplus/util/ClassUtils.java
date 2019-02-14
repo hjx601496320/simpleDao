@@ -63,6 +63,8 @@ public class ClassUtils {
             return true;
         } catch (IllegalAccessException e) {
             e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            //数据库中没有值得情况下报错，可以忽略
         }
         return false;
     }
