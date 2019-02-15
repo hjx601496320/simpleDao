@@ -21,8 +21,8 @@ public class DefaultDeleteTest {
         delete.where(
                 Wheres.equal("id", 12)
         );
-        System.out.println(delete.makeSql());
-        System.out.println(Arrays.toString(delete.makeSqlValue().toArray()));
+        System.out.println(delete.toSql());
+        System.out.println(Arrays.toString(delete.getSqlValues()));
 
     }
 
@@ -41,8 +41,8 @@ public class DefaultDeleteTest {
                 Wheres.equal("user_name", "hebaibai")
         );
 
-        System.out.println(delete.makeSql());
-        System.out.println(Arrays.toString(delete.makeSqlValue().toArray()));
+        System.out.println(delete.toSql());
+        System.out.println(Arrays.toString(delete.getSqlValues()));
 
     }
 }

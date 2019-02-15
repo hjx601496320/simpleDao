@@ -19,8 +19,8 @@ public class DefaultInsertTest {
         DefaultInsert insert = new DefaultInsert();
         insert.target(User.class);
         insert.insert(user);
-        System.out.println(insert.makeSql());
-        System.out.println(Arrays.toString(insert.makeSqlValue().toArray()));
+        System.out.println(insert.toSql());
+        System.out.println(Arrays.toString(insert.getSqlValues()));
     }
 
 }

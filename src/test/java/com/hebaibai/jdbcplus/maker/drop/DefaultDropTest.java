@@ -18,8 +18,8 @@ public class DefaultDropTest {
         DefaultDrop drop = new DefaultDrop();
         drop.target(User.class);
 
-        System.out.println(drop.makeSql());
-        System.out.println(Arrays.toString(drop.makeSqlValue().toArray()));
+        System.out.println(drop.toSql());
+        System.out.println(Arrays.toString(drop.getSqlValues()));
     }
 
     @Test

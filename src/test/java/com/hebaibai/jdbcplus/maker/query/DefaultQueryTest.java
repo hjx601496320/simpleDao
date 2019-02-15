@@ -9,7 +9,7 @@ import java.util.Arrays;
 public class DefaultQueryTest {
 
     @Test
-    public void addSelection() {
+    public void makeSql() {
         DefaultQuery query = new DefaultQuery();
         query.target(User.class);
         query.where(
@@ -17,31 +17,21 @@ public class DefaultQueryTest {
                 Wheres.notEqual("name", 12),
                 Wheres.greater("age", 12, true)
         );
-        System.out.println(query.makeSql());
-        System.out.println(Arrays.toString(query.makeSqlValue().toArray()));
+        System.out.println(query.toSql());
+        System.out.println(query.toSql());
+        System.out.println(Arrays.toString(query.getSqlValues()));
+        System.out.println(Arrays.toString(query.getSqlValues()));
     }
 
-    @Test
-    public void addSelectionNoCheck() {
-        DefaultQuery query = new DefaultQuery();
-        query.target(User.class);
-        query.addSelection(false, "123", "234", "567");
-        System.out.println(query.makeSql());
-        System.out.println(Arrays.toString(query.makeSqlValue().toArray()));
-    }
 
     @Test
     public void orderBy() {
-        long currentTimeMillis = System.currentTimeMillis();
-        for (int i = 0; i < 100; i++) {
-            DefaultQuery query = new DefaultQuery();
-            query.target(User.class);
-            query.orderBy("name ,  age", "DESC");
-            String sql = query.makeSql();
-            System.out.println(sql);
-            System.out.println(Arrays.toString(query.makeSqlValue().toArray()));
-        }
-        System.out.println(System.currentTimeMillis() - currentTimeMillis);
+        DefaultQuery query = new DefaultQuery();
+        query.target(User.class);
+        query.orderBy("name ,  age", "DESC");
+        String sql = query.toSql();
+        System.out.println(sql);
+        System.out.println(Arrays.toString(query.getSqlValues()));
     }
 
     @Test
@@ -50,8 +40,8 @@ public class DefaultQueryTest {
         query.target(User.class);
         query.limit(0, 10);
         query.orderBy("name,age", "DESC");
-        System.out.println(query.makeSql());
-        System.out.println(Arrays.toString(query.makeSqlValue().toArray()));
+        System.out.println(query.toSql());
+        System.out.println(Arrays.toString(query.getSqlValues()));
 
     }
 
@@ -65,7 +55,7 @@ public class DefaultQueryTest {
                 Wheres.equal("user_name", "hebaiabi"),
                 Wheres.less("age", 13, true).or()
         );
-        System.out.println(query.makeSql());
-        System.out.println(Arrays.toString(query.makeSqlValue().toArray()));
+        System.out.println(query.toSql());
+        System.out.println(Arrays.toString(query.getSqlValues()));
     }
 }

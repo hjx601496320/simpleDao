@@ -150,12 +150,12 @@ public class JdbcPlusTest extends JdbcTest {
 
     @Test
     public void selectOne() {
-        List<Foo> foos = jdbcPlus.selectBySql("select * from tbl_accesscore_log limit 1, 2", Foo.class);
+        List<Foo> foos = jdbcPlus.selectBySql("select * from user limit 1, 2", Foo.class);
         for (Foo foo : foos) {
             System.out.println(foo);
         }
 
-        List<Foo> foos2 = jdbcPlus.selectBySql("select * from tbl_accesscore_log limit ?, ?", new Object[]{1, 10}, Foo.class);
+        List<Foo> foos2 = jdbcPlus.selectBySql("select * from user limit ?, ?", new Object[]{1, 10}, Foo.class);
         for (Foo foo : foos2) {
             System.out.println(foo);
         }

@@ -4,26 +4,10 @@ import com.hebaibai.jdbcplus.maker.SqlMaker;
 
 /**
  * 查询
+ *
  * @author hjx
  */
 public interface Query extends SqlMaker {
-
-    /**
-     * 添加查询内容
-     *
-     * @param columnName
-     * @return
-     */
-    boolean addSelection(String... columnName);
-
-    /**
-     * 添加查询内容
-     *
-     * @param check      是否检查字段是否存在
-     * @param columnName
-     * @return
-     */
-    boolean addSelection(boolean check, String... columnName);
 
     /**
      * 排序

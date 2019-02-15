@@ -28,24 +28,6 @@ public class DefaultQuery extends AbstractSqlMaker implements Query {
     private StringBuilder sql = new StringBuilder();
 
     @Override
-    public boolean addSelection(String... columnName) {
-        return addSelection(true, columnName);
-    }
-
-    @Override
-    public boolean addSelection(boolean check, String... columnNames) {
-        List<String> list = Arrays.asList(columnNames);
-        for (String columnName : list) {
-            if (check) {
-                checkColumn(columnName);
-                selection.add(getColumnName(columnName));
-            }
-            selection.add(columnName);
-        }
-        return true;
-    }
-
-    @Override
     public Query orderBy(String orderBy, String type) {
         String[] split = orderBy.split(",");
         for (int i = 0; i < split.length; i++) {
@@ -68,9 +50,7 @@ public class DefaultQuery extends AbstractSqlMaker implements Query {
     @Override
     protected String makeSql() {
         EntityTableRowMapper entityTableRowMapper = getEntityTableRowMapper();
-        if (selection.size() == 0) {
-            selection = new ArrayList<>(entityTableRowMapper.getColumnNames());
-        }
+        selection.addAll(entityTableRowMapper.getColumnNames());
         sql.append(
                 MessageFormat.format("SELECT {0} FROM {1} ",
                         StringUtils.join(selection, StringUtils.COMMA), getTableName())

@@ -208,8 +208,20 @@ public abstract class AbstractSqlMaker implements SqlMaker {
         return null;
     }
 
+    /**
+     * 需要子类实现的，创建sql的代码
+     * 禁止直接调用
+     *
+     * @return
+     */
     protected abstract String makeSql();
 
+    /**
+     * 需要子类实现的，创建sql中参数的代码
+     * 禁止直接调用
+     *
+     * @return
+     */
     protected abstract List<Object> makeSqlValue();
 
 }

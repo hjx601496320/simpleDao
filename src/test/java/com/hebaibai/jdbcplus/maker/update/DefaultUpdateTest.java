@@ -22,8 +22,8 @@ public class DefaultUpdateTest {
         defaultUpdate.where(
                 Wheres.equal("id", 12)
         );
-        System.out.println(defaultUpdate.makeSql());
-        System.out.println(Arrays.toString(defaultUpdate.makeSqlValue().toArray()));
+        System.out.println(defaultUpdate.toSql());
+        System.out.println(Arrays.toString(defaultUpdate.getSqlValues()));
     }
 
     @Test
@@ -38,7 +38,7 @@ public class DefaultUpdateTest {
         defaultUpdate.set(user, true);
         defaultUpdate.where(Wheres.equal("age", 11));
 
-        System.out.println(defaultUpdate.makeSql());
-        System.out.println(Arrays.toString(defaultUpdate.makeSqlValue().toArray()));
+        System.out.println(defaultUpdate.toSql());
+        System.out.println(Arrays.toString(defaultUpdate.getSqlValues()));
     }
 }
