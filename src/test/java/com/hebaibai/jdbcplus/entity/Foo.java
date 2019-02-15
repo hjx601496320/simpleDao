@@ -2,32 +2,33 @@ package com.hebaibai.jdbcplus.entity;
 
 public class Foo {
 
+    private int id;
 
-    String ID;
-    String REQUEST_TYPE;
+    private int age;
 
+    private String mark;
 
-    public String getREQUEST_TYPE() {
-        return REQUEST_TYPE;
+    public int getId() {
+        return id;
     }
 
-    public void setREQUEST_TYPE(String REQUEST_TYPE) {
-        this.REQUEST_TYPE = REQUEST_TYPE;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getID() {
-        return ID;
+    public int getAge() {
+        return age;
     }
 
-    public void setID(String ID) {
-        this.ID = ID;
+    public void setAge(int age) {
+        this.age = age;
     }
 
-    @Override
-    public String toString() {
-        return "Foo{" +
-                "ID='" + ID + '\'' +
-                ", REQUEST_TYPE='" + REQUEST_TYPE + '\'' +
-                '}';
+    public String getMark() {
+        return mark;
+    }
+
+    public void setMark(String mark) {
+        this.mark = mark;
     }
 }

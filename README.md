@@ -76,7 +76,7 @@ jdbcPlus.insertBatch(User.class, list);
 
 ```java
 //查出所有的User
-jdbcPlus.simpleDao.select(User.class)
+jdbcPlus.select(User.class)
 //查出id为12的数据
 jdbcPlus.selectById(User.class, "12");
 //查出所有的user_name 等于 "123" 的数据,user_name 为数据库字段名称
@@ -86,9 +86,44 @@ jdbcPlus.selectBy(User.class, "user_name", "123");
 jdbcPlus.selectBy( User.class, "name", "123", "age", "18" );
 ```
 
-### 其他操作
+### 删除数据
 
-请看单元测试
+```java
+//根据id删除数据
+Integer deleteById = jdbcPlus.deleteById(User.class, "123");
+//删除属性age是19的数据
+Integer deleteBy = jdbcPlus.deleteBy(User.class, "age", "19");
+//删除age是19，user_name是hebaibai的数据
+Integer deleteBy = jdbcPlus.deleteBy(
+    User.class,
+    "age", "19",
+    "user_name", "hebaibai"
+);
+```
+
+### 更新数据
+
+```java
+//根据id更新数据，不忽略属性中的null进行更新
+User user = new User();
+user.setMark("markUpdate");
+user.setId(new Random().nextInt(100));
+Integer integer = jdbcPlus.updateById(user);
+//根据id更新数据，忽略属性中的null进行更新
+User user = new User();
+user.setMark("markUpdate");
+user.setId(new Random().nextInt(100));
+Integer integer = jdbcPlus.updateById(user, true);
+```
+
+
+
+### 执行sql查询
+
+```java
+//将查询结果绑定在Foo.class上
+List<Foo> foos = jdbcPlus.selectBySql("select * from user limit 1, 2", Foo.class);
+```
 
 
 
