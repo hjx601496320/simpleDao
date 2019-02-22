@@ -9,11 +9,9 @@ public class JdbcPlusProxyTest extends JdbcTest {
 
     @Test
     public void selectById() {
-        Tools tools = jdbcPlus.selectById(Tools.class, 1);
-        Class aClass = tools.getClass();
-        System.out.println(tools);
-        User user = tools.getUserId();
-        System.out.println(user);
+        User user = jdbcPlus.selectById(User.class, 2);
+        User parent = user.getParentId();
+        System.out.println(parent);
     }
 
     @Test

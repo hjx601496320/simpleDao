@@ -104,13 +104,11 @@ public class JdbcPlusTest extends JdbcTest {
 
     @Test
     public void updateById() {
-        for (int i = 0; i < 10; i++) {
-            User user = new User();
-            user.setMark("markUpdate");
-            user.setId(new Random().nextInt(100));
-            Integer integer = jdbcPlus.updateById(User.class, user);
-            System.out.println(integer);
-        }
+        User user = new User();
+        user.setMark("markUpdate");
+        user.setId(new Random().nextInt(100));
+        Integer integer = jdbcPlus.updateById(User.class, user);
+        System.out.println(integer);
     }
 
     @Test
