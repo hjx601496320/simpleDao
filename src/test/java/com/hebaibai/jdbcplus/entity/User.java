@@ -12,6 +12,7 @@ import java.util.Date;
 
 /**
  * 用户表
+ *
  * @author hejiaxuan
  */
 @Getter
@@ -19,37 +20,53 @@ import java.util.Date;
 @Table(name = "user")
 public class User {
 
-    /**big*/
+    /**
+     * big
+     */
     @Column(name = "big")
     private BigDecimal big;
 
-    /**用户名*/
+    /**
+     * 用户名
+     */
     @Column(name = "name")
     private String name;
 
-    /**用户id*/
+    /**
+     * 用户id
+     */
     @Id
     @Column(name = "id")
     private int id;
 
-    /**年龄*/
+    /**
+     * 年龄
+     */
     @Column(name = "age")
     private int age;
 
-    /**mark*/
+    /**
+     * mark
+     */
     @Column(name = "mark")
     private String mark;
 
-    /**parent_id*/
+    /**
+     * parent_id
+     */
     @Column(name = "parent_id")
     @JoinColumn(name = "id")
     private User parentId;
 
-    /**create_date*/
+    /**
+     * create_date
+     */
     @Column(name = "create_date")
     private Date createDate;
 
-    /**status*/
+    /**
+     * status
+     */
     @Column(name = "status")
     private int status;
 

@@ -31,6 +31,20 @@ public class ClassUtils {
     }
 
     /**
+     * 根据className加载class
+     * @param className
+     * @return
+     */
+    public static Class forName(String className) {
+        try {
+            Class<?> aClass = Class.forName(className);
+            return aClass;
+        } catch (ClassNotFoundException e) {
+        }
+        return null;
+    }
+
+    /**
      * 取值
      *
      * @param target 要从哪一个对象中取值
@@ -94,5 +108,4 @@ public class ClassUtils {
         }
         return null;
     }
-
 }

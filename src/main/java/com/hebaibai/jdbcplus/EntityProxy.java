@@ -65,7 +65,7 @@ public class EntityProxy implements MethodInterceptor {
         Class fkEntityClass = method.getReturnType();
         //返回值的Class不是一个Table，说明不是一个外键，直接返回
         //方法定义的返回值与执行结果不属于一个Class，说明为代理对象，直接返回结果
-        if (fkEntityClass != invokeResult.getClass() || !EntityUtils.isTable(fkEntityClass)) {
+        if (invokeResult == null || fkEntityClass != invokeResult.getClass() || !EntityUtils.isTable(fkEntityClass)) {
             return invokeResult;
         }
         Field fkField = getFieldBy(method);

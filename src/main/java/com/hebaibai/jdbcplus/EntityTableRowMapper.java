@@ -118,22 +118,25 @@ public class EntityTableRowMapper<T> implements RowMapper<T> {
     /**
      * 用于填充查询对象，使其toString中外键值不显示null
      *
-     * @param fkField 外键属性
-     * @param value   sql中的结果
+     * @param fkField  外键属性
+     * @param sqlValue sql中的结果
      * @return
      */
-    Object getJoinFieldObject(Field fkField, Object value) {
-        if (value == null) {
+    Object getJoinFieldObject(Field fkField, Object sqlValue) {
+        if (sqlValue == null) {
             return null;
         }
         Class fieldType = fkField.getType();
+        //找到对应的Class
+        EntityTableRowMapper mapper = EntityMapperFactory.getMapper(fieldType);
+        Map<String, Field> mapperColumnFieldMapper = mapper.getColumnFieldMapper();
         JoinColumn joinColumn = EntityUtils.getAnnotation(fkField, JoinColumn.class);
         String fieldName = joinColumn.name();
         //实例化原始对象，与之后的代理对象做区分
-        Object joinFieldValue = ClassUtils.getInstance(fieldType);
-        Field field = columnFieldMapper.get(fieldName);
-        ClassUtils.setValue(joinFieldValue, field, value);
-        return joinFieldValue;
+        Object entityValue = ClassUtils.getInstance(fieldType);
+        Field field = mapperColumnFieldMapper.get(fieldName);
+        ClassUtils.setValue(entityValue, field, sqlValue);
+        return entityValue;
     }
 
     public String getIdName() {

@@ -40,7 +40,7 @@ public class JdbcPlusTest extends JdbcTest {
             user.setMark("mark");
             user.setAge(new Random().nextInt(100));
             user.setCreateDate(new Date());
-            jdbcPlus.insert(user);
+            jdbcPlus.insert(User.class, user);
         }
         System.out.println(System.currentTimeMillis() - l);
     }
@@ -108,7 +108,7 @@ public class JdbcPlusTest extends JdbcTest {
             User user = new User();
             user.setMark("markUpdate");
             user.setId(new Random().nextInt(100));
-            Integer integer = jdbcPlus.updateById(user);
+            Integer integer = jdbcPlus.updateById(User.class, user);
             System.out.println(integer);
         }
     }
@@ -119,7 +119,7 @@ public class JdbcPlusTest extends JdbcTest {
             User user = new User();
             user.setMark("markUpdate");
             user.setId(new Random().nextInt(100));
-            Integer integer = jdbcPlus.updateById(user, true);
+            Integer integer = jdbcPlus.updateById(User.class, user, true);
             System.out.println(integer);
         }
     }
