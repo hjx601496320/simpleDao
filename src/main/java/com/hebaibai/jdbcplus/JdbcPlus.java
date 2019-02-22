@@ -1,8 +1,5 @@
 package com.hebaibai.jdbcplus;
 
-import com.hebaibai.jdbcplus.jdbc.EntityMapperFactory;
-import com.hebaibai.jdbcplus.jdbc.EntityTableRowMapper;
-import com.hebaibai.jdbcplus.jdbc.FieldColumnRowMapper;
 import com.hebaibai.jdbcplus.maker.Wheres;
 import com.hebaibai.jdbcplus.maker.delete.DefaultDelete;
 import com.hebaibai.jdbcplus.maker.delete.Delete;
@@ -12,13 +9,12 @@ import com.hebaibai.jdbcplus.maker.query.DefaultQuery;
 import com.hebaibai.jdbcplus.maker.query.Query;
 import com.hebaibai.jdbcplus.maker.update.DefaultUpdate;
 import com.hebaibai.jdbcplus.maker.update.Update;
+import com.hebaibai.jdbcplus.mapper.FieldColumnRowMapper;
 import com.hebaibai.jdbcplus.util.ClassUtils;
 import com.hebaibai.jdbcplus.util.EntityUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.util.Assert;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -29,11 +25,11 @@ import java.util.List;
  *
  * @author hjx
  */
+@CommonsLog
 public class JdbcPlus {
 
-    private Log logger = LogFactory.getLog(JdbcPlus.class);
-
     private JdbcTemplate jdbcTemplate;
+
 
     /**
      * 查询所有
@@ -308,9 +304,9 @@ public class JdbcPlus {
     final public Integer insertBy(final Insert insert) {
         String sql = insert.toSql();
         Object[] sqlValues = insert.getSqlValues();
-        if (logger.isDebugEnabled()) {
-            logger.debug(sql);
-            logger.debug(Arrays.toString(sqlValues));
+        if (log.isDebugEnabled()) {
+            log.debug(sql);
+            log.debug(Arrays.toString(sqlValues));
         }
         return jdbcTemplate.update(sql, sqlValues);
     }
@@ -324,9 +320,9 @@ public class JdbcPlus {
     final public Integer deleteBy(final Delete delete) {
         String sql = delete.toSql();
         Object[] sqlValues = delete.getSqlValues();
-        if (logger.isDebugEnabled()) {
-            logger.debug(sql);
-            logger.debug(Arrays.toString(sqlValues));
+        if (log.isDebugEnabled()) {
+            log.debug(sql);
+            log.debug(Arrays.toString(sqlValues));
         }
         return jdbcTemplate.update(sql, sqlValues);
     }
@@ -340,9 +336,9 @@ public class JdbcPlus {
     final public Integer updateBy(final Update update) {
         String sql = update.toSql();
         Object[] sqlValues = update.getSqlValues();
-        if (logger.isDebugEnabled()) {
-            logger.debug(sql);
-            logger.debug(Arrays.toString(sqlValues));
+        if (log.isDebugEnabled()) {
+            log.debug(sql);
+            log.debug(Arrays.toString(sqlValues));
         }
         return jdbcTemplate.update(sql, sqlValues);
     }
@@ -355,11 +351,12 @@ public class JdbcPlus {
      */
     final public List selectBy(final Query query) {
         EntityTableRowMapper mapper = EntityMapperFactory.getMapper(query.getEntity());
+        mapper.setJdbcPlus(this);
         String sql = query.toSql();
         Object[] sqlValues = query.getSqlValues();
-        if (logger.isDebugEnabled()) {
-            logger.debug(sql);
-            logger.debug(Arrays.toString(sqlValues));
+        if (log.isDebugEnabled()) {
+            log.debug(sql);
+            log.debug(Arrays.toString(sqlValues));
         }
         return jdbcTemplate.query(sql, sqlValues, mapper);
 
@@ -367,7 +364,7 @@ public class JdbcPlus {
 
 
     public JdbcPlus() {
-        super();
+        EntityMapperFactory.setJdbcPlus(this);
     }
 
     public JdbcTemplate getJdbcTemplate() {

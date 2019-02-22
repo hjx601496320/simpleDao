@@ -1,6 +1,6 @@
 package com.hebaibai.jdbcplus.maker;
 
-import com.hebaibai.jdbcplus.jdbc.EntityTableRowMapper;
+import com.hebaibai.jdbcplus.EntityTableRowMapper;
 
 import java.util.List;
 

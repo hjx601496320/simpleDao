@@ -1,15 +1,18 @@
 package com.hebaibai.jdbcplus.maker;
 
 import com.hebaibai.jdbcplus.util.StringUtils;
+import lombok.experimental.UtilityClass;
 
 import java.util.Arrays;
 
 /**
  * 查询条件
+ *
  * @author hjx
  */
+@UtilityClass
 public class Wheres {
-    
+
     public static Where equal(final String columnName, final Object value) {
         return new Where(columnName, Where.PLACEHOLDER + " = ? ", value);
     }

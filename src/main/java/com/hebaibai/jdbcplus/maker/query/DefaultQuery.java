@@ -1,8 +1,8 @@
 package com.hebaibai.jdbcplus.maker.query;
 
-import com.hebaibai.jdbcplus.jdbc.EntityTableRowMapper;
+import com.hebaibai.jdbcplus.EntityTableRowMapper;
 import com.hebaibai.jdbcplus.util.StringUtils;
-import com.hebaibai.jdbcplus.maker.AbstractSqlMaker;
+import com.hebaibai.jdbcplus.AbstractSqlMaker;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;

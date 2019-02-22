@@ -1,5 +1,8 @@
 package com.hebaibai.jdbcplus.maker;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -9,9 +12,11 @@ import java.util.List;
  *
  * @author hjx
  */
+@Getter
+@Setter
 public class Where {
 
-    protected static final String PLACEHOLDER = "#{COLUMN}";
+    public static final String PLACEHOLDER = "#{COLUMN}";
 
     static final String AND = "AND ";
 
@@ -76,28 +81,4 @@ public class Where {
         return this;
     }
 
-    /**
-     * 获取本次条件的连接符
-     *
-     * @return
-     */
-    public String getConnect() {
-        return connect;
-    }
-
-    protected String getSql() {
-        return sql;
-    }
-
-    protected boolean isHasValue() {
-        return hasValue;
-    }
-
-    protected List<Object> getValues() {
-        return values;
-    }
-
-    public String getColumn() {
-        return column;
-    }
 }
