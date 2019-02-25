@@ -3,6 +3,7 @@ package com.hebaibai.jdbcplus;
 import com.hebaibai.jdbcplus.entity.Foo;
 import com.hebaibai.jdbcplus.entity.User;
 import com.hebaibai.jdbcplus.jdbc.JdbcTest;
+import com.hebaibai.jdbcplus.maker.Where;
 import com.hebaibai.jdbcplus.maker.Wheres;
 import com.hebaibai.jdbcplus.maker.delete.DefaultDelete;
 import com.hebaibai.jdbcplus.maker.delete.Delete;
@@ -157,5 +158,19 @@ public class JdbcPlusTest extends JdbcTest {
         for (Foo foo : foos2) {
             System.out.println(foo);
         }
+    }
+
+    @Test
+    public void selectForColumns() {
+        List<Where> wheres = Arrays.asList(Wheres.equal("id", 2));
+        List<Map<String, Object>> maps = jdbcPlus.selectColumnForList(User.class, wheres, "id", "name");
+        System.out.println(maps);
+    }
+
+    @Test
+    public void selectColumnForMap() {
+        List<Where> wheres = Arrays.asList(Wheres.equal("id", 2));
+        Map<String, Object> map = jdbcPlus.selectColumnForMap(User.class, wheres, "count(*) as count");
+        System.out.println(map);
     }
 }

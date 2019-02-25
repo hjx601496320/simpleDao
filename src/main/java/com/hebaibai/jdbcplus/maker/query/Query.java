@@ -2,12 +2,16 @@ package com.hebaibai.jdbcplus.maker.query;
 
 import com.hebaibai.jdbcplus.maker.SqlMaker;
 
+import java.util.List;
+
 /**
  * 查询
  *
  * @author hjx
  */
 public interface Query extends SqlMaker {
+
+    void addQueryColumns(List<String> selectColumns);
 
     /**
      * 排序

@@ -1,5 +1,6 @@
 package com.hebaibai.jdbcplus;
 
+import com.hebaibai.jdbcplus.maker.Where;
 import com.hebaibai.jdbcplus.maker.Wheres;
 import com.hebaibai.jdbcplus.maker.delete.DefaultDelete;
 import com.hebaibai.jdbcplus.maker.delete.Delete;
@@ -19,6 +20,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 简化对象的数据操作
@@ -181,6 +183,34 @@ public class JdbcPlus {
      */
     final public <T> List<T> selectBySql(final String sql, final Class<T> objClass) {
         return jdbcTemplate.query(sql, new FieldColumnRowMapper(objClass));
+    }
+
+    /**
+     * 限定字段查询（多个结果）
+     *
+     * @param entityClass 添加了@Table的Class
+     * @param wheres      查询条件
+     * @param columnNames 数据库中的字段个名称
+     * @return
+     */
+    final public List<Map<String, Object>> selectColumnForList(final Class entityClass, final List<Where> wheres, final String... columnNames) {
+        Query query = new DefaultQuery();
+        query.target(entityClass);
+        query.addQueryColumns(Arrays.asList(columnNames));
+        query.where(wheres);
+        return jdbcTemplate.queryForList(query.toSql(), query.getSqlValues());
+    }
+
+    /**
+     * 限定字段查询（多个结果）
+     *
+     * @param entityClass 添加了@Table的Class
+     * @param wheres      查询条件
+     * @param columnNames 数据库中的字段个名称
+     * @return
+     */
+    final public Map<String, Object> selectColumnForMap(final Class entityClass, final List<Where> wheres, final String... columnNames) {
+        return DataAccessUtils.requiredSingleResult(selectColumnForList(entityClass, wheres, columnNames));
     }
 
     /**
@@ -363,7 +393,6 @@ public class JdbcPlus {
             log.debug(Arrays.toString(sqlValues));
         }
         return jdbcTemplate.query(sql, sqlValues, mapper);
-
     }
 
 
