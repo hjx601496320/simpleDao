@@ -1,9 +1,10 @@
 package com.hebaibai.jdbcplus.maker.insert;
 
-import com.hebaibai.jdbcplus.maker.AbstractSqlMaker;
+import com.hebaibai.jdbcplus.AbstractSqlMaker;
 import com.hebaibai.jdbcplus.maker.SqlMaker;
 import com.hebaibai.jdbcplus.maker.Where;
 import com.hebaibai.jdbcplus.util.ClassUtils;
+import com.hebaibai.jdbcplus.util.EntityUtils;
 import com.hebaibai.jdbcplus.util.StringUtils;
 import org.springframework.util.Assert;
 
@@ -45,6 +46,14 @@ public class DefaultInsert extends AbstractSqlMaker implements Insert {
             Object value = ClassUtils.getValue(entity, field);
             if (value == null) {
                 continue;
+            }
+            if (EntityUtils.isJoinColumn(field)) {
+                //找到对应关联对象中的相应属性的值
+                Field fkTargetField = EntityUtils.getEntityFkTargetField(field);
+                value = ClassUtils.getValue(value, fkTargetField);
+                if (value == null) {
+                    continue;
+                }
             }
             insertColumns.add(stringFieldEntry.getKey());
             insertColumnValues.add(value);

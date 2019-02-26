@@ -1,4 +1,4 @@
-package com.hebaibai.jdbcplus.jdbc;
+package com.hebaibai.jdbcplus.mapper;
 
 import org.springframework.jdbc.core.ColumnMapRowMapper;
 import java.sql.ResultSet;

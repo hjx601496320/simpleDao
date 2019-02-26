@@ -14,41 +14,110 @@
  JdbcPlus.setJdbcTemplate(jdbcTemplate);
 ```
 
+### 建表语句
+
+```sql
+create table user
+(
+  id          int auto_increment
+  comment '用户id'
+    primary key,
+  name        varchar(225) null
+  comment '用户名',
+  create_date datetime     null,
+  status      int          null,
+  age         int          null
+  comment '年龄',
+  mark        varchar(225) null,
+  big         decimal      null
+)
+  comment '用户表';
+```
+
+
+
 ### 在class上添加注解
 
 ```java
-import java.util.Date;
-import javax.persistence.Id;
-import javax.persistence.Column;
-import javax.persistence.Table;
+package com.hebaibai.jdbcplus.entity;
 
-// 表示一张表 value为数据库表名
-@Table(name="user")
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Table;
+import java.math.BigDecimal;
+import java.util.Date;
+
+/**
+ * 用户表
+ *
+ * @author hejiaxuan
+ */
+@Getter
+@Setter
+@Table(name = "user")
 public class User {
 
-    @Column(name="name")
+    /**
+     * big
+     */
+    @Column(name = "big")
+    private BigDecimal big;
+
+    /**
+     * 用户名
+     */
+    @Column(name = "name")
     private String name;
 
-    // 表示一个id（一个class限制一个id）
-    @Id 
-    // 表示一个字段 value为数据库字段名
-    @Column(name="id") 
+    /**
+     * 用户id
+     */
+    @Id
+    @Column(name = "id")
     private int id;
 
-    @Column(name="age")
+    /**
+     * 年龄
+     */
+    @Column(name = "age")
     private int age;
 
-    @Column(name="mark")
+    /**
+     * mark
+     */
+    @Column(name = "mark")
     private String mark;
 
-    @Column(name="create_date")
+
+    /**
+     * create_date
+     */
+    @Column(name = "create_date")
     private Date createDate;
 
-    @Column(name="status")
+    /**
+     * status
+     */
+    @Column(name = "status")
     private int status;
-    ...
-    get...
-    set...
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "big=" + big +
+                ", name='" + name + '\'' +
+                ", id=" + id +
+                ", age=" + age +
+                ", mark='" + mark + '\'' +
+                ", parentId=" + parentId +
+                ", createDate=" + createDate +
+                ", status=" + status +
+                '}';
+    }
 }
 
 ```
@@ -74,6 +143,8 @@ jdbcPlus.insertBatch(User.class, list);
 
 ### 查询数据
 
+#### 普通查询
+
 ```java
 //查出所有的User
 jdbcPlus.select(User.class)
@@ -85,6 +156,58 @@ jdbcPlus.selectBy(User.class, "user_name", "123");
 //查询条件中的 参数可以是添加了 @Column 的属性名称 此处 user_name 等效与 name
 jdbcPlus.selectBy( User.class, "name", "123", "age", "18" );
 ```
+
+#### 对象关联查询
+
+需要对 **表** 和 **实体类** 做出如下修改：
+
+1：修改 **user** 表。添加 **parent_id**字段，值为user表的的id，表示上级用户。（**不需要外键支持**）
+
+```sql
+-- auto-generated definition
+create table user (
+  id          int auto_increment comment '用户id' primary key,
+  name        varchar(225) null  comment '用户名',
+  create_date datetime     null,
+  status      int          null,
+  age         int          null  comment '年龄',
+  mark        varchar(225) null,
+  big         decimal      null,
+  parent_id   int          null
+) comment '用户表';
+```
+
+2：修改 **User.class** 对象，添加属性
+
+**@JoinColumn(name = "id")** 表示字段关联到 **user** 表的 id字段。
+
+```java
+    /**
+     * parent_id
+     */
+    @Column(name = "parent_id")
+    @JoinColumn(name = "id")
+    private User parentId;
+```
+
+3：查询代码
+
+```java
+//查询id是2的user
+User user = jdbcPlus.selectById(User.class, 2);
+//使用get方法将关联的user查询出来（只有在执行get时才执行查询，只执行一次）
+User parent = user.getParentId();
+System.out.println(parent);
+```
+
+#### 执行sql查询
+
+```java
+//将查询结果绑定在Foo.class上
+List<Foo> foos = jdbcPlus.selectBySql("select * from user limit 1, 2", Foo.class);
+```
+
+
 
 ### 删除数据
 
@@ -108,21 +231,12 @@ Integer deleteBy = jdbcPlus.deleteBy(
 User user = new User();
 user.setMark("markUpdate");
 user.setId(new Random().nextInt(100));
-Integer integer = jdbcPlus.updateById(user);
+Integer integer = jdbcPlus.updateById(User.class, user);
 //根据id更新数据，忽略属性中的null进行更新
 User user = new User();
 user.setMark("markUpdate");
 user.setId(new Random().nextInt(100));
-Integer integer = jdbcPlus.updateById(user, true);
-```
-
-
-
-### 执行sql查询
-
-```java
-//将查询结果绑定在Foo.class上
-List<Foo> foos = jdbcPlus.selectBySql("select * from user limit 1, 2", Foo.class);
+Integer integer = jdbcPlus.updateById(User.class, user, true);
 ```
 
 

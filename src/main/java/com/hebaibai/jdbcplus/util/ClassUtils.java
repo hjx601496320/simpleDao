@@ -1,12 +1,15 @@
 package com.hebaibai.jdbcplus.util;
 
+import lombok.experimental.UtilityClass;
 import org.springframework.util.Assert;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 /**
  * class工具类
  */
+@UtilityClass
 public class ClassUtils {
     /**
      * 实例化泛型对象
@@ -25,6 +28,20 @@ public class ClassUtils {
             e.printStackTrace();
         }
         throw new RuntimeException("实例化对象失败");
+    }
+
+    /**
+     * 根据className加载class
+     * @param className
+     * @return
+     */
+    public static Class forName(String className) {
+        try {
+            Class<?> aClass = Class.forName(className);
+            return aClass;
+        } catch (ClassNotFoundException e) {
+        }
+        return null;
     }
 
     /**
@@ -69,4 +86,26 @@ public class ClassUtils {
         return false;
     }
 
+    /**
+     * 获取该属性的get方法
+     *
+     * @param field
+     * @return
+     */
+    public static Method getGetMethod(Field field) {
+        Assert.notNull(field);
+        String fieldName = field.getName();
+        char[] ch = fieldName.toCharArray();
+        if (ch[0] >= 'a' && ch[0] <= 'z') {
+            ch[0] = (char) (ch[0] - 32);
+        }
+        Class<?> declaringClass = field.getDeclaringClass();
+        String methodName = "get" + new String(ch);
+        try {
+            Method getMethod = declaringClass.getDeclaredMethod(methodName, null);
+            return getMethod;
+        } catch (NoSuchMethodException e) {
+        }
+        return null;
+    }
 }

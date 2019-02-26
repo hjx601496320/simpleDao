@@ -1,5 +1,6 @@
 package com.hebaibai.jdbcplus.util;
 
+import lombok.experimental.UtilityClass;
 import org.springframework.util.Assert;
 
 import java.util.Collection;
@@ -8,6 +9,7 @@ import java.util.Iterator;
 /**
  * @author hjx
  */
+@UtilityClass
 public class StringUtils {
 
     public static final String SPACE = " ";
@@ -65,5 +67,19 @@ public class StringUtils {
             }
         }
         return var2.toString();
+    }
+
+    /**
+     * 字母小写
+     *
+     * @param str
+     * @return
+     */
+    public String lowCase(String str, int index) {
+        char[] ch = str.toCharArray();
+        if (ch[index] >= 'A' && ch[index] <= 'Z') {
+            ch[index] = (char) (ch[index] + 32);
+        }
+        return new String(ch);
     }
 }

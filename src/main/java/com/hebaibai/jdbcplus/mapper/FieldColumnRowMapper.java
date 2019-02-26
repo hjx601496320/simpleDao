@@ -1,11 +1,9 @@
-package com.hebaibai.jdbcplus.jdbc;
+package com.hebaibai.jdbcplus.mapper;
 
 import com.hebaibai.jdbcplus.util.ClassUtils;
-import com.hebaibai.jdbcplus.util.EntityUtils;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 
-import javax.persistence.Column;
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -49,15 +47,6 @@ public class FieldColumnRowMapper implements RowMapper {
         for (Field field : fields) {
             String name = field.getName();
             Object value = resultMap.get(name);
-            //value为null时，查找字段上有没有Column注解
-            if (value == null) {
-                Column column = EntityUtils.getAnnotation(field, Column.class);
-                //注解不为null时，通过字段名称从结果集中找结果
-                if (column != null) {
-                    String columnName = column.name();
-                    value = resultMap.get(columnName);
-                }
-            }
             if (value == null) {
                 continue;
             }

@@ -1,6 +1,6 @@
 package com.hebaibai.jdbcplus.maker.drop;
 
-import com.hebaibai.jdbcplus.maker.AbstractSqlMaker;
+import com.hebaibai.jdbcplus.AbstractSqlMaker;
 import com.hebaibai.jdbcplus.maker.SqlMaker;
 import com.hebaibai.jdbcplus.maker.Where;
 

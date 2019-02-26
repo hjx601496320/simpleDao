@@ -6,7 +6,7 @@
 
     <groupId>com.hebaibai</groupId>
     <artifactId>JdbcPlus</artifactId>
-    <version>1.1.0-RELEASE</version>
+    <version>1.1.1-RELEASE</version>
     <name>JdbcPlus</name>
 
     <properties>
@@ -52,6 +52,12 @@
             <groupId>javax.persistence</groupId>
             <artifactId>persistence-api</artifactId>
             <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.20</version>
         </dependency>
 
         <dependency>

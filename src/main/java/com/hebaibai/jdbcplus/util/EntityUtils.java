@@ -1,9 +1,12 @@
 package com.hebaibai.jdbcplus.util;
 
+import lombok.experimental.UtilityClass;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -15,10 +18,13 @@ import java.util.Map;
  *
  * @author hjx
  */
+@UtilityClass
 public class EntityUtils {
 
     static final String IS_NOT_TABLE = "Class 不是一个Table";
     static final String IS_NOT_COLUMN = "field 不是一个Column";
+    static final String IS_NOT_JOINCOLUMN = "field 不是一个JoinColumn";
+    static final String JOINCOLUMN_NAME_NOT_BLANK = "JoinColumn.name() 不能为空";
     static final String CLASS_NOT_NULL = "class 不能为 null";
     static final String FIELD_NOT_NULL = "field 不能为 null";
     static final String ANNOTATIONCLASS_NOT_NULL = "annotationClass 不能为 null";
@@ -72,6 +78,29 @@ public class EntityUtils {
             }
         }
         return map;
+    }
+
+    /**
+     * 获取添加了JoinColumn注解的属性的相关联的对象的属性
+     *
+     * @param field
+     * @return
+     */
+    public static Field getEntityFkTargetField(Field field) {
+        JoinColumn joinColumn = getAnnotation(field, JoinColumn.class);
+        Assert.notNull(joinColumn, IS_NOT_JOINCOLUMN);
+        String targetColumnName = joinColumn.name();
+        Assert.isTrue(!StringUtils.isEmpty(targetColumnName), JOINCOLUMN_NAME_NOT_BLANK);
+        //关联的Entity
+        Class<?> fieldType = field.getType();
+        Assert.isTrue(isTable(fieldType), IS_NOT_TABLE);
+        Field[] fields = fieldType.getDeclaredFields();
+        for (Field f : fields) {
+            if (isColumn(field) && columnName(f).equals(targetColumnName)) {
+                return f;
+            }
+        }
+        return null;
     }
 
     /**
@@ -130,7 +159,7 @@ public class EntityUtils {
      * @param aClass
      * @return
      */
-    static boolean isTable(Class aClass) {
+    public static boolean isTable(Class aClass) {
         if (hasAnnotation(aClass, Table.class)) {
             return true;
         }
@@ -143,8 +172,21 @@ public class EntityUtils {
      * @param field
      * @return
      */
-    static boolean isColumn(Field field) {
+    public static boolean isColumn(Field field) {
         if (hasAnnotation(field, Column.class)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 是否是一个外键
+     *
+     * @param field
+     * @return
+     */
+    public static boolean isJoinColumn(Field field) {
+        if (hasAnnotation(field, JoinColumn.class)) {
             return true;
         }
         return false;

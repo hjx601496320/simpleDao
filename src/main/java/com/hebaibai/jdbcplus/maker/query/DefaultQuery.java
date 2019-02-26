@@ -1,8 +1,8 @@
 package com.hebaibai.jdbcplus.maker.query;
 
-import com.hebaibai.jdbcplus.jdbc.EntityTableRowMapper;
+import com.hebaibai.jdbcplus.AbstractSqlMaker;
+import com.hebaibai.jdbcplus.EntityTableRowMapper;
 import com.hebaibai.jdbcplus.util.StringUtils;
-import com.hebaibai.jdbcplus.maker.AbstractSqlMaker;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -18,14 +18,29 @@ public class DefaultQuery extends AbstractSqlMaker implements Query {
 
     private String sqlLimit = StringUtils.BLANK;
     private String sqlOrderBy = StringUtils.BLANK;
+
     /**
      * 要查询作为结果的字段
      */
-    private List<String> selection = new ArrayList<>();
+    private List<String> selectColumns = null;
+
     /**
      * sql
      */
     private StringBuilder sql = new StringBuilder();
+
+    /**
+     * 手动设定要查询的字段
+     *
+     * @param selectColumns
+     */
+    @Override
+    public void addQueryColumns(List<String> selectColumns) {
+        //不为空，并且list中有值的时候
+        if (selectColumns != null && selectColumns.size() != 0) {
+            this.selectColumns = selectColumns;
+        }
+    }
 
     @Override
     public Query orderBy(String orderBy, String type) {
@@ -50,11 +65,11 @@ public class DefaultQuery extends AbstractSqlMaker implements Query {
     @Override
     protected String makeSql() {
         EntityTableRowMapper entityTableRowMapper = getEntityTableRowMapper();
-        selection.addAll(entityTableRowMapper.getColumnNames());
-        sql.append(
-                MessageFormat.format("SELECT {0} FROM {1} ",
-                        StringUtils.join(selection, StringUtils.COMMA), getTableName())
-        );
+        if (selectColumns == null) {
+            selectColumns = new ArrayList<>(entityTableRowMapper.getColumnNames());
+        }
+        sql.append(MessageFormat.format("SELECT {0} FROM {1} ",
+                StringUtils.join(selectColumns, StringUtils.COMMA), getTableName()));
         sql.append(sqlWhere());
         sql.append(sqlOrderBy);
         sql.append(sqlLimit);

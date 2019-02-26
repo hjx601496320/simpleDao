@@ -1,10 +1,16 @@
-package com.hebaibai.jdbcplus.jdbc;
+package com.hebaibai.jdbcplus;
 
+import com.hebaibai.jdbcplus.mapper.PlusColumnMapRowMapper;
 import com.hebaibai.jdbcplus.util.ClassUtils;
+import com.hebaibai.jdbcplus.util.EntityUtils;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.SneakyThrows;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.util.Assert;
 
+import javax.persistence.JoinColumn;
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,6 +23,8 @@ import java.util.Set;
  * @param <T>
  * @author hjx
  */
+@Getter
+@Setter
 public class EntityTableRowMapper<T> implements RowMapper<T> {
 
     /**
@@ -64,6 +72,11 @@ public class EntityTableRowMapper<T> implements RowMapper<T> {
     private ColumnMapRowMapper columnMapRowMapper = new PlusColumnMapRowMapper();
 
     /**
+     * 对象查询时使用
+     */
+    private JdbcPlus jdbcPlus;
+
+    /**
      * 把数据库查询的结果与对象进行转换
      *
      * @param resultSet
@@ -72,9 +85,13 @@ public class EntityTableRowMapper<T> implements RowMapper<T> {
      * @throws SQLException
      */
     @Override
-    public T mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+    @SneakyThrows(SQLException.class)
+    public T mapRow(ResultSet resultSet, int rowNum) {
         Map<String, Object> resultMap = columnMapRowMapper.mapRow(resultSet, rowNum);
+        //创建cglib代理对象
         Object instance = ClassUtils.getInstance(tableClass);
+        EntityProxy entityProxy = EntityProxy.entityProxy(instance, jdbcPlus);
+        Object proxy = entityProxy.getProxy();
         for (Map.Entry<String, Object> entry : resultMap.entrySet()) {
             //数据库字段名
             String key = entry.getKey();
@@ -85,28 +102,41 @@ public class EntityTableRowMapper<T> implements RowMapper<T> {
             if (declaredField == null) {
                 continue;
             }
-            //数据库字段值
             Object value = entry.getValue();
-            ClassUtils.setValue(instance, declaredField, value);
+            //日过添加@JoinColumn注解，将关联对象中新建一个空对象占位
+            if (EntityUtils.isJoinColumn(declaredField)) {
+                Object fkObject = getJoinFieldObject(declaredField, value);
+                ClassUtils.setValue(proxy, declaredField, fkObject);
+            } else {
+                ClassUtils.setValue(proxy, declaredField, value);
+            }
         }
-        return (T) instance;
+        return (T) proxy;
     }
 
 
-    public Map<String, Field> getColumnFieldMapper() {
-        return columnFieldMapper;
-    }
-
-    public void setColumnFieldMapper(Map<String, Field> columnFieldMapper) {
-        this.columnFieldMapper = columnFieldMapper;
-    }
-
-    public String getTableName() {
-        return tableName;
-    }
-
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
+    /**
+     * 用于填充查询对象，使其toString中外键值不显示null
+     *
+     * @param fkField  外键属性
+     * @param sqlValue sql中的结果
+     * @return
+     */
+    Object getJoinFieldObject(Field fkField, Object sqlValue) {
+        if (sqlValue == null) {
+            return null;
+        }
+        Class fieldType = fkField.getType();
+        //找到对应的Class
+        EntityTableRowMapper mapper = EntityMapperFactory.getMapper(fieldType);
+        Map<String, Field> mapperColumnFieldMapper = mapper.getColumnFieldMapper();
+        JoinColumn joinColumn = EntityUtils.getAnnotation(fkField, JoinColumn.class);
+        String fieldName = joinColumn.name();
+        //实例化原始对象，与之后的代理对象做区分
+        Object entityValue = ClassUtils.getInstance(fieldType);
+        Field field = mapperColumnFieldMapper.get(fieldName);
+        ClassUtils.setValue(entityValue, field, sqlValue);
+        return entityValue;
     }
 
     public String getIdName() {
@@ -114,39 +144,4 @@ public class EntityTableRowMapper<T> implements RowMapper<T> {
         return idName;
     }
 
-    public void setIdName(String idName) {
-        this.idName = idName;
-    }
-
-    public Class<T> getTableClass() {
-        return tableClass;
-    }
-
-    public void setTableClass(Class tableClass) {
-        this.tableClass = tableClass;
-    }
-
-    public Set<String> getColumnNames() {
-        return columnNames;
-    }
-
-    public void setColumnNames(Set<String> columnNames) {
-        this.columnNames = columnNames;
-    }
-
-    public Set<String> getFieldNames() {
-        return fieldNames;
-    }
-
-    public void setFieldNames(Set<String> fieldNames) {
-        this.fieldNames = fieldNames;
-    }
-
-    public Map<String, String> getFieldNameColumnMapper() {
-        return fieldNameColumnMapper;
-    }
-
-    public void setFieldNameColumnMapper(Map<String, String> fieldNameColumnMapper) {
-        this.fieldNameColumnMapper = fieldNameColumnMapper;
-    }
 }
