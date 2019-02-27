@@ -11,7 +11,6 @@ import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.cglib.proxy.MethodProxy;
 import org.springframework.util.Assert;
 
-import javax.persistence.Column;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
@@ -95,7 +94,7 @@ public class EntityProxy implements MethodInterceptor {
             Object value = ClassUtils.getValue(invokeResult, fkTargetField);
             //执行查询
             log.debug("对外键属性进行数据库查询。。。");
-            Object fkEntityProxy = jdbcPlus.selectOneBy(fkEntityClass, column.name(), value);
+            Object fkEntityProxy = jdbcPlus.selectOneBy(fkEntityClass, column.value(), value);
             //将查询结果赋值给原对象
             ClassUtils.setValue(this.proxy, fkField, fkEntityProxy);
             return invokeResult;
