@@ -97,7 +97,7 @@ public class EntityProxy implements MethodInterceptor {
             Object fkEntityProxy = jdbcPlus.selectOneBy(fkEntityClass, column.value(), value);
             //将查询结果赋值给原对象
             ClassUtils.setValue(this.proxy, fkField, fkEntityProxy);
-            return invokeResult;
+            return fkEntityProxy;
         } else {
             return invokeResult;
         }

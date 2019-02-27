@@ -1,12 +1,12 @@
 package com.hebaibai.jdbcplus.util;
 
+import com.hebaibai.jdbcplus.FK;
 import lombok.experimental.UtilityClass;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import com.hebaibai.jdbcplus.Column;
 import com.hebaibai.jdbcplus.Id;
-import com.hebaibai.jdbcplus.JoinColumn;
 import com.hebaibai.jdbcplus.Table;
 
 import java.lang.annotation.Annotation;
@@ -25,7 +25,7 @@ public class EntityUtils {
     static final String IS_NOT_TABLE = "Class 不是一个Table";
     static final String IS_NOT_COLUMN = "field 不是一个Column";
     static final String IS_NOT_JOINCOLUMN = "field 不是一个JoinColumn";
-    static final String JOINCOLUMN_NAME_NOT_BLANK = "JoinColumn.name() 不能为空";
+    static final String JOINCOLUMN_NAME_NOT_BLANK = "FK.name() 不能为空";
     static final String CLASS_NOT_NULL = "class 不能为 null";
     static final String FIELD_NOT_NULL = "field 不能为 null";
     static final String ANNOTATIONCLASS_NOT_NULL = "annotationClass 不能为 null";
@@ -88,9 +88,9 @@ public class EntityUtils {
      * @return
      */
     public static Field getEntityFkTargetField(Field field) {
-        JoinColumn joinColumn = getAnnotation(field, JoinColumn.class);
-        Assert.notNull(joinColumn, IS_NOT_JOINCOLUMN);
-        String targetColumnName = joinColumn.value();
+        FK FK = getAnnotation(field, FK.class);
+        Assert.notNull(FK, IS_NOT_JOINCOLUMN);
+        String targetColumnName = FK.value();
         Assert.isTrue(!StringUtils.isEmpty(targetColumnName), JOINCOLUMN_NAME_NOT_BLANK);
         //关联的Entity
         Class<?> fieldType = field.getType();
@@ -187,7 +187,7 @@ public class EntityUtils {
      * @return
      */
     public static boolean isJoinColumn(Field field) {
-        if (hasAnnotation(field, JoinColumn.class)) {
+        if (hasAnnotation(field, FK.class)) {
             return true;
         }
         return false;
