@@ -129,8 +129,8 @@ public class EntityTableRowMapper<T> implements RowMapper<T> {
         //找到对应的Class
         EntityTableRowMapper mapper = EntityMapperFactory.getMapper(fieldType);
         Map<String, Field> mapperColumnFieldMapper = mapper.getColumnFieldMapper();
-        JoinColumn joinColumn = EntityUtils.getAnnotation(fkField, JoinColumn.class);
-        String fieldName = joinColumn.value();
+        FK FK = EntityUtils.getAnnotation(fkField, FK.class);
+        String fieldName = FK.value();
         //实例化原始对象，与之后的代理对象做区分
         Object entityValue = ClassUtils.getInstance(fieldType);
         Field field = mapperColumnFieldMapper.get(fieldName);

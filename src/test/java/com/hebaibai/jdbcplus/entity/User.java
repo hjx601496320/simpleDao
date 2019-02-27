@@ -1,8 +1,8 @@
 package com.hebaibai.jdbcplus.entity;
 
 import com.hebaibai.jdbcplus.Column;
+import com.hebaibai.jdbcplus.FK;
 import com.hebaibai.jdbcplus.Id;
-import com.hebaibai.jdbcplus.JoinColumn;
 import com.hebaibai.jdbcplus.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -55,7 +55,7 @@ public class User {
      * parent_id
      */
     @Column("parent_id")
-    @JoinColumn("id")
+    @FK("id")
     private User parentId;
 
     /**
