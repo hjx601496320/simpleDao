@@ -4,10 +4,11 @@ import lombok.experimental.UtilityClass;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Table;
+import com.hebaibai.jdbcplus.Column;
+import com.hebaibai.jdbcplus.Id;
+import com.hebaibai.jdbcplus.JoinColumn;
+import com.hebaibai.jdbcplus.Table;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -89,7 +90,7 @@ public class EntityUtils {
     public static Field getEntityFkTargetField(Field field) {
         JoinColumn joinColumn = getAnnotation(field, JoinColumn.class);
         Assert.notNull(joinColumn, IS_NOT_JOINCOLUMN);
-        String targetColumnName = joinColumn.name();
+        String targetColumnName = joinColumn.value();
         Assert.isTrue(!StringUtils.isEmpty(targetColumnName), JOINCOLUMN_NAME_NOT_BLANK);
         //关联的Entity
         Class<?> fieldType = field.getType();
@@ -139,7 +140,7 @@ public class EntityUtils {
      */
     public static String tableName(Class<?> clz) {
         Assert.isTrue(isTable(clz), IS_NOT_TABLE);
-        return getAnnotation(clz, Table.class).name();
+        return getAnnotation(clz, Table.class).value();
     }
 
     /**
@@ -150,7 +151,7 @@ public class EntityUtils {
      */
     static String columnName(Field field) {
         Assert.isTrue(isColumn(field), IS_NOT_COLUMN);
-        return getAnnotation(field, Column.class).name();
+        return getAnnotation(field, Column.class).value();
     }
 
     /**
