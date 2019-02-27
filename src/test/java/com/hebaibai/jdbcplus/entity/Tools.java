@@ -2,7 +2,7 @@ package com.hebaibai.jdbcplus.entity;
 
 import com.hebaibai.jdbcplus.Column;
 import com.hebaibai.jdbcplus.Id;
-import com.hebaibai.jdbcplus.JoinColumn;
+import com.hebaibai.jdbcplus.FK;
 import com.hebaibai.jdbcplus.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -40,7 +40,7 @@ public class Tools {
      * 所属用户
      */
     @Column("user_id")
-    @JoinColumn("id")
+    @FK("id")
     private User userId;
 
     @Override

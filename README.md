@@ -46,7 +46,7 @@ import lombok.Setter;
 
 import com.hebaibai.jdbcplus.Column;
 import com.hebaibai.jdbcplus.Id;
-import com.hebaibai.jdbcplus.JoinColumn;
+import com.hebaibai.jdbcplus.FK;
 import com.hebaibai.jdbcplus.Table;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -179,14 +179,14 @@ create table user (
 
 2：修改 **User.class** 对象，添加属性
 
-**@JoinColumn("id")** 表示字段关联到 **user** 表的 id字段。
+**@FK("id")** 表示字段关联到 **user** 表的 id字段。
 
 ```java
     /**
      * parent_id
      */
     @Column("parent_id")
-    @JoinColumn("id")
+    @FK("id")
     private User parentId;
 ```
 
