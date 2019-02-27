@@ -10,7 +10,6 @@ import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.util.Assert;
 
-import javax.persistence.JoinColumn;
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -131,7 +130,7 @@ public class EntityTableRowMapper<T> implements RowMapper<T> {
         EntityTableRowMapper mapper = EntityMapperFactory.getMapper(fieldType);
         Map<String, Field> mapperColumnFieldMapper = mapper.getColumnFieldMapper();
         JoinColumn joinColumn = EntityUtils.getAnnotation(fkField, JoinColumn.class);
-        String fieldName = joinColumn.name();
+        String fieldName = joinColumn.value();
         //实例化原始对象，与之后的代理对象做区分
         Object entityValue = ClassUtils.getInstance(fieldType);
         Field field = mapperColumnFieldMapper.get(fieldName);

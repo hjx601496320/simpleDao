@@ -1,12 +1,12 @@
 package com.hebaibai.jdbcplus.entity;
 
+import com.hebaibai.jdbcplus.Column;
+import com.hebaibai.jdbcplus.Id;
+import com.hebaibai.jdbcplus.JoinColumn;
+import com.hebaibai.jdbcplus.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -17,57 +17,57 @@ import java.util.Date;
  */
 @Getter
 @Setter
-@Table(name = "user")
+@Table("user")
 public class User {
 
     /**
      * big
      */
-    @Column(name = "big")
+    @Column("big")
     private BigDecimal big;
 
     /**
      * 用户名
      */
-    @Column(name = "name")
+    @Column("name")
     private String name;
 
     /**
      * 用户id
      */
     @Id
-    @Column(name = "id")
+    @Column("id")
     private int id;
 
     /**
      * 年龄
      */
-    @Column(name = "age")
+    @Column("age")
     private int age;
 
     /**
      * mark
      */
-    @Column(name = "mark")
+    @Column("mark")
     private String mark;
 
     /**
      * parent_id
      */
-    @Column(name = "parent_id")
-    @JoinColumn(name = "id")
+    @Column("parent_id")
+    @JoinColumn("id")
     private User parentId;
 
     /**
      * create_date
      */
-    @Column(name = "create_date")
+    @Column("create_date")
     private Date createDate;
 
     /**
      * status
      */
-    @Column(name = "status")
+    @Column("status")
     private int status;
 
     @Override
