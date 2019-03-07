@@ -157,6 +157,9 @@ public class JdbcPlus {
      */
     final public <T> T selectOneBy(final Query query) {
         List<T> list = selectBy(query);
+        if (list.size() == 0) {
+            return null;
+        }
         return DataAccessUtils.requiredSingleResult(list);
     }
 
