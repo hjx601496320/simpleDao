@@ -55,7 +55,7 @@ public class DefaultInsert extends AbstractSqlMaker implements Insert {
                     continue;
                 }
             }
-            insertColumns.add("`" + stringFieldEntry.getKey() + "`");
+            insertColumns.add(StringUtils.sqlColumn(stringFieldEntry.getKey()));
             insertColumnValues.add(value);
         }
         //添加插入数量

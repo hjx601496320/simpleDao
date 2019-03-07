@@ -70,7 +70,7 @@ public class DefaultQuery extends AbstractSqlMaker implements Query {
         if (selectColumns == null) {
             selectColumns = new ArrayList<>(columnNames.size());
             for (String columnName : columnNames) {
-                selectColumns.add("`" + columnName + "`");
+                selectColumns.add(StringUtils.sqlColumn(columnName));
             }
         }
         sql.append(MessageFormat.format("SELECT {0} FROM {1} ",
