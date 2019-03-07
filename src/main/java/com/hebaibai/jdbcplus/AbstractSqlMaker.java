@@ -2,6 +2,7 @@ package com.hebaibai.jdbcplus;
 
 import com.hebaibai.jdbcplus.maker.SqlMaker;
 import com.hebaibai.jdbcplus.maker.Where;
+import com.hebaibai.jdbcplus.util.StringUtils;
 import org.springframework.util.Assert;
 
 import java.util.*;
@@ -180,7 +181,7 @@ public abstract class AbstractSqlMaker implements SqlMaker {
                     sql.append(where.getConnect());
                 }
                 String columnName = getColumnName(where.getColumn());
-                String realSql = where.getSql().replace(Where.PLACEHOLDER, columnName);
+                String realSql = where.getSql().replace(Where.PLACEHOLDER, StringUtils.sqlColumn(columnName));
                 sql.append(realSql);
             }
         }

@@ -8,6 +8,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 默认的查询
@@ -65,8 +66,12 @@ public class DefaultQuery extends AbstractSqlMaker implements Query {
     @Override
     protected String makeSql() {
         EntityTableRowMapper entityTableRowMapper = getEntityTableRowMapper();
+        Set<String> columnNames = entityTableRowMapper.getColumnNames();
         if (selectColumns == null) {
-            selectColumns = new ArrayList<>(entityTableRowMapper.getColumnNames());
+            selectColumns = new ArrayList<>(columnNames.size());
+            for (String columnName : columnNames) {
+                selectColumns.add(StringUtils.sqlColumn(columnName));
+            }
         }
         sql.append(MessageFormat.format("SELECT {0} FROM {1} ",
                 StringUtils.join(selectColumns, StringUtils.COMMA), getTableName()));

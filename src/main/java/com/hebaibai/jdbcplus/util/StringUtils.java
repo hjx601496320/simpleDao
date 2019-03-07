@@ -18,6 +18,15 @@ public class StringUtils {
 
     public static final String COMMA = ", ";
 
+    /**
+     * 将字段添加``，防止因为sql字段是关键字造成的操作失败
+     *
+     * @param column
+     * @return
+     */
+    public static String sqlColumn(String column) {
+        return "`" + column + "`";
+    }
 
     /**
      * 重复字符串
