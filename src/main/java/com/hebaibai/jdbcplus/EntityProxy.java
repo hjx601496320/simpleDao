@@ -11,6 +11,7 @@ import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.cglib.proxy.MethodProxy;
 import org.springframework.util.Assert;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
@@ -20,7 +21,7 @@ import java.lang.reflect.Method;
  * @author hjx
  */
 @CommonsLog
-public class EntityProxy implements MethodInterceptor {
+public class EntityProxy implements MethodInterceptor, Serializable {
 
     /**
      * 代理对象
