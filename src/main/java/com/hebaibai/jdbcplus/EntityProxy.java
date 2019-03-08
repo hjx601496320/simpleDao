@@ -4,6 +4,7 @@ import com.hebaibai.jdbcplus.util.ClassUtils;
 import com.hebaibai.jdbcplus.util.EntityUtils;
 import com.hebaibai.jdbcplus.util.StringUtils;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.cglib.proxy.Enhancer;
@@ -27,12 +28,18 @@ public class EntityProxy implements MethodInterceptor, Serializable {
      * 代理对象
      */
     @Getter
-    private Object proxy;
+    transient private Object proxy;
+
+    /**
+     * 代理对象的class
+     */
+    @Setter
+    private Class targetClass;
 
     /**
      * 数据库操作工具
      */
-    private JdbcPlus jdbcPlus;
+    transient private JdbcPlus jdbcPlus;
 
     /**
      * 创建代理对象
@@ -43,11 +50,12 @@ public class EntityProxy implements MethodInterceptor, Serializable {
     public static EntityProxy entityProxy(Object entity, JdbcPlus jdbcPlus) {
         log.debug("创建代理对象：" + entity.getClass().getName());
         EntityProxy entityProxy = new EntityProxy();
-        Class targetClass = entity.getClass();
-        Assert.isTrue(EntityUtils.isTable(targetClass), "代理对象不是一个@Table！");
+        Class<?> entityClass = entity.getClass();
+        entityProxy.setTargetClass(entityClass);
+        Assert.isTrue(EntityUtils.isTable(entityClass), "代理对象不是一个@Table！");
         Enhancer enhancer = new Enhancer();
-        enhancer.setSuperclass(targetClass);
-        //设置方法回调
+        enhancer.setSuperclass(entityClass);
+        enhancer.setInterfaces(new Class[]{Serializable.class});
         enhancer.setCallback(entityProxy);
         //创建代理对象
         entityProxy.proxy = enhancer.create();
