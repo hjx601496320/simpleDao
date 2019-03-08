@@ -13,18 +13,6 @@
         <spring.jdbc.version>4.2.9.RELEASE</spring.jdbc.version>
     </properties>
 
-    <distributionManagement>
-        <repository>
-            <id>releases</id>
-            <name>deployment</name>
-            <url>http://10.168.10.199:18081/nexus/content/repositories/releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>snapshots</id>
-            <name>deployment</name>
-            <url>http://10.168.10.199:18081/nexus/content/repositories/snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
 
     <dependencies>
 
