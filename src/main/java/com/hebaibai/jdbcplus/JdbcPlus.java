@@ -17,6 +17,7 @@ import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
@@ -28,9 +29,9 @@ import java.util.Map;
  * @author hjx
  */
 @CommonsLog
-public class JdbcPlus {
+public class JdbcPlus implements Serializable {
 
-    private JdbcTemplate jdbcTemplate;
+    transient private JdbcTemplate jdbcTemplate;
 
 
     /**
