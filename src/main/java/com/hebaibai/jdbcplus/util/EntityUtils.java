@@ -217,4 +217,5 @@ public class EntityUtils {
         Assert.notNull(annotationClass, ANNOTATIONCLASS_NOT_NULL);
         return field.isAnnotationPresent(annotationClass);
     }
+
 }

@@ -87,17 +87,32 @@ public class EntityTableRowMapper<T> implements RowMapper<T> {
     @SneakyThrows(SQLException.class)
     public T mapRow(ResultSet resultSet, int rowNum) {
         Map<String, Object> resultMap = columnMapRowMapper.mapRow(resultSet, rowNum);
-        //创建cglib代理对象
-        Object instance = ClassUtils.getInstance(tableClass);
-        EntityProxy entityProxy = EntityProxy.entityProxy(instance, jdbcPlus);
-        Object proxy = entityProxy.getProxy();
+        //entity是否含有@FK注解，在没有@Fk注解的时候，使用原始对象
+        boolean hasFk = false;
+        Map<String, Field> columnFieldMapper = getColumnFieldMapper();
+        for (Map.Entry<String, Field> stringFieldEntry : columnFieldMapper.entrySet()) {
+            Field value = stringFieldEntry.getValue();
+            boolean joinColumn = EntityUtils.isJoinColumn(value);
+            if (joinColumn) {
+                hasFk = true;
+                break;
+            }
+        }
+        //实例化对象
+        Object instance = null;
+        if (hasFk) {
+            EntityProxy entityProxy = EntityProxy.entityProxy(instance, jdbcPlus);
+            instance = entityProxy.getProxy();
+        } else {
+            instance = ClassUtils.getInstance(tableClass);
+        }
         for (Map.Entry<String, Object> entry : resultMap.entrySet()) {
             //数据库字段名
             String key = entry.getKey();
-            if (!columnFieldMapper.containsKey(key)) {
+            if (!this.columnFieldMapper.containsKey(key)) {
                 continue;
             }
-            Field declaredField = columnFieldMapper.get(key);
+            Field declaredField = this.columnFieldMapper.get(key);
             if (declaredField == null) {
                 continue;
             }
@@ -105,12 +120,12 @@ public class EntityTableRowMapper<T> implements RowMapper<T> {
             //日过添加@JoinColumn注解，将关联对象中新建一个空对象占位
             if (EntityUtils.isJoinColumn(declaredField)) {
                 Object fkObject = getJoinFieldObject(declaredField, value);
-                ClassUtils.setValue(proxy, declaredField, fkObject);
+                ClassUtils.setValue(instance, declaredField, fkObject);
             } else {
-                ClassUtils.setValue(proxy, declaredField, value);
+                ClassUtils.setValue(instance, declaredField, value);
             }
         }
-        return (T) proxy;
+        return (T) instance;
     }
 
 
