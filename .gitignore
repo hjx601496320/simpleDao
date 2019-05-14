@@ -18,3 +18,7 @@ simple-dao\.iml
 simpleDao\.iml
 
 jdbcplus\.iml
+
+*.iml
+
+\.idea/
