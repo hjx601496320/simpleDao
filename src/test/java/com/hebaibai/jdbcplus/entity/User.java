@@ -1,7 +1,6 @@
 package com.hebaibai.jdbcplus.entity;
 
 import com.hebaibai.jdbcplus.Column;
-import com.hebaibai.jdbcplus.FK;
 import com.hebaibai.jdbcplus.Id;
 import com.hebaibai.jdbcplus.Table;
 import lombok.Getter;
@@ -52,13 +51,6 @@ public class User {
     private String mark;
 
     /**
-     * parent_id
-     */
-    @Column("parent_id")
-    @FK("id")
-    private User parentId;
-
-    /**
      * create_date
      */
     @Column("create_date")
@@ -78,7 +70,6 @@ public class User {
                 ", id=" + id +
                 ", age=" + age +
                 ", mark='" + mark + '\'' +
-                ", parentId=" + parentId +
                 ", createDate=" + createDate +
                 ", status=" + status +
                 '}';

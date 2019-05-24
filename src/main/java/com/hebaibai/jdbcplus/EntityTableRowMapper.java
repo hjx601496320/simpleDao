@@ -87,25 +87,8 @@ public class EntityTableRowMapper<T> implements RowMapper<T> {
     @SneakyThrows(SQLException.class)
     public T mapRow(ResultSet resultSet, int rowNum) {
         Map<String, Object> resultMap = columnMapRowMapper.mapRow(resultSet, rowNum);
-        //entity是否含有@FK注解，在没有@Fk注解的时候，使用原始对象
-        boolean hasFk = false;
-        Map<String, Field> columnFieldMapper = getColumnFieldMapper();
-        for (Map.Entry<String, Field> stringFieldEntry : columnFieldMapper.entrySet()) {
-            Field value = stringFieldEntry.getValue();
-            boolean joinColumn = EntityUtils.isJoinColumn(value);
-            if (joinColumn) {
-                hasFk = true;
-                break;
-            }
-        }
         //实例化对象
-        Object instance = null;
-        if (hasFk) {
-            EntityProxy entityProxy = EntityProxy.entityProxy(instance, jdbcPlus);
-            instance = entityProxy.getProxy();
-        } else {
-            instance = ClassUtils.getInstance(tableClass);
-        }
+        Object instance = ClassUtils.getInstance(tableClass);
         for (Map.Entry<String, Object> entry : resultMap.entrySet()) {
             //数据库字段名
             String key = entry.getKey();
@@ -117,40 +100,9 @@ public class EntityTableRowMapper<T> implements RowMapper<T> {
                 continue;
             }
             Object value = entry.getValue();
-            //日过添加@JoinColumn注解，将关联对象中新建一个空对象占位
-            if (EntityUtils.isJoinColumn(declaredField)) {
-                Object fkObject = getJoinFieldObject(declaredField, value);
-                ClassUtils.setValue(instance, declaredField, fkObject);
-            } else {
-                ClassUtils.setValue(instance, declaredField, value);
-            }
+            ClassUtils.setValue(instance, declaredField, value);
         }
         return (T) instance;
-    }
-
-
-    /**
-     * 用于填充查询对象，使其toString中外键值不显示null
-     *
-     * @param fkField  外键属性
-     * @param sqlValue sql中的结果
-     * @return
-     */
-    Object getJoinFieldObject(Field fkField, Object sqlValue) {
-        if (sqlValue == null) {
-            return null;
-        }
-        Class fieldType = fkField.getType();
-        //找到对应的Class
-        EntityTableRowMapper mapper = EntityMapperFactory.getMapper(fieldType);
-        Map<String, Field> mapperColumnFieldMapper = mapper.getColumnFieldMapper();
-        FK FK = EntityUtils.getAnnotation(fkField, FK.class);
-        String fieldName = FK.value();
-        //实例化原始对象，与之后的代理对象做区分
-        Object entityValue = ClassUtils.getInstance(fieldType);
-        Field field = mapperColumnFieldMapper.get(fieldName);
-        ClassUtils.setValue(entityValue, field, sqlValue);
-        return entityValue;
     }
 
     public String getIdName() {

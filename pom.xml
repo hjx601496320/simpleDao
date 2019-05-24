@@ -6,27 +6,31 @@
 
     <groupId>com.hebaibai</groupId>
     <artifactId>JdbcPlus</artifactId>
-    <version>1.1.2-SNAPSHOTS</version>
+    <version>0.0.1-SNAPSHOTS</version>
     <name>JdbcPlus</name>
-
-    <properties>
-        <spring.jdbc.version>4.2.9.RELEASE</spring.jdbc.version>
-    </properties>
 
 
     <dependencies>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jdbc</artifactId>
-            <version>${spring.jdbc.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>RELEASE</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -39,8 +43,8 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.16.20</version>
-            <scope>provided</scope>
+            <version>RELEASE</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
@@ -48,13 +52,6 @@
             <artifactId>c3p0</artifactId>
             <version>0.9.5.3</version>
             <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.47</version>
-            <scope>test</scope>
         </dependency>
 
     </dependencies>

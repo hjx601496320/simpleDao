@@ -1,13 +1,10 @@
 package com.hebaibai.jdbcplus.util;
 
-import com.hebaibai.jdbcplus.FK;
-import lombok.experimental.UtilityClass;
-import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
-
 import com.hebaibai.jdbcplus.Column;
 import com.hebaibai.jdbcplus.Id;
 import com.hebaibai.jdbcplus.Table;
+import lombok.experimental.UtilityClass;
+import org.springframework.util.Assert;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -82,29 +79,6 @@ public class EntityUtils {
     }
 
     /**
-     * 获取添加了JoinColumn注解的属性的相关联的对象的属性
-     *
-     * @param field
-     * @return
-     */
-    public static Field getEntityFkTargetField(Field field) {
-        FK FK = getAnnotation(field, FK.class);
-        Assert.notNull(FK, IS_NOT_JOINCOLUMN);
-        String targetColumnName = FK.value();
-        Assert.isTrue(!StringUtils.isEmpty(targetColumnName), JOINCOLUMN_NAME_NOT_BLANK);
-        //关联的Entity
-        Class<?> fieldType = field.getType();
-        Assert.isTrue(isTable(fieldType), IS_NOT_TABLE);
-        Field[] fields = fieldType.getDeclaredFields();
-        for (Field f : fields) {
-            if (isColumn(field) && columnName(f).equals(targetColumnName)) {
-                return f;
-            }
-        }
-        return null;
-    }
-
-    /**
      * 获取类上的注解
      *
      * @param clz
@@ -175,19 +149,6 @@ public class EntityUtils {
      */
     public static boolean isColumn(Field field) {
         if (hasAnnotation(field, Column.class)) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * 是否是一个外键
-     *
-     * @param field
-     * @return
-     */
-    public static boolean isJoinColumn(Field field) {
-        if (hasAnnotation(field, FK.class)) {
             return true;
         }
         return false;

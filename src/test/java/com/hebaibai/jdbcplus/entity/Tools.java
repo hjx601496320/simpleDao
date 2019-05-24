@@ -2,7 +2,6 @@ package com.hebaibai.jdbcplus.entity;
 
 import com.hebaibai.jdbcplus.Column;
 import com.hebaibai.jdbcplus.Id;
-import com.hebaibai.jdbcplus.FK;
 import com.hebaibai.jdbcplus.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,20 +35,12 @@ public class Tools {
     @Column("type")
     private String type;
 
-    /**
-     * 所属用户
-     */
-    @Column("user_id")
-    @FK("id")
-    private User userId;
-
     @Override
     public String toString() {
         return "Tools{" +
                 "name='" + name + '\'' +
                 ", id=" + id +
                 ", type='" + type + '\'' +
-                ", userId=" + userId +
                 '}';
     }
 }

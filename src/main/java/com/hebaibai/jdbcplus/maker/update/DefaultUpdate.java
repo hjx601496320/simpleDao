@@ -2,7 +2,6 @@ package com.hebaibai.jdbcplus.maker.update;
 
 import com.hebaibai.jdbcplus.AbstractSqlMaker;
 import com.hebaibai.jdbcplus.util.ClassUtils;
-import com.hebaibai.jdbcplus.util.EntityUtils;
 import com.hebaibai.jdbcplus.util.StringUtils;
 import org.springframework.util.Assert;
 
@@ -50,14 +49,6 @@ public class DefaultUpdate extends AbstractSqlMaker implements Update {
             //如果class中的值是null，并且设置忽略null，跳过
             if (ignoreNull && value == null) {
                 continue;
-            }
-            if (EntityUtils.isJoinColumn(field)) {
-                //找到对应关联对象中的相应属性的值
-                Field fkTargetField = EntityUtils.getEntityFkTargetField(field);
-                value = ClassUtils.getValue(value, fkTargetField);
-                if (value == null) {
-                    continue;
-                }
             }
             updataColumn.add(columnName);
             values.add(value);

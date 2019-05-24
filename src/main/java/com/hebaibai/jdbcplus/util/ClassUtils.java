@@ -32,6 +32,7 @@ public class ClassUtils {
 
     /**
      * 根据className加载class
+     *
      * @param className
      * @return
      */
@@ -54,11 +55,16 @@ public class ClassUtils {
     public static Object getValue(Object target, Field field) {
         Assert.notNull(target);
         Assert.notNull(field);
-        field.setAccessible(true);
+        boolean accessible = field.isAccessible();
+        if (!accessible) {
+            field.setAccessible(true);
+        }
         try {
             return field.get(target);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
+        } finally {
+            field.setAccessible(accessible);
         }
         return null;
     }
@@ -74,7 +80,10 @@ public class ClassUtils {
     public static boolean setValue(Object target, Field field, Object value) {
         Assert.notNull(target);
         Assert.notNull(field);
-        field.setAccessible(true);
+        boolean accessible = field.isAccessible();
+        if (!accessible) {
+            field.setAccessible(true);
+        }
         try {
             field.set(target, value);
             return true;
@@ -82,6 +91,8 @@ public class ClassUtils {
             e.printStackTrace();
         } catch (IllegalArgumentException e) {
             //数据库中没有值得情况下报错，可以忽略
+        } finally {
+            field.setAccessible(accessible);
         }
         return false;
     }

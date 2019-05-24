@@ -399,10 +399,6 @@ public class JdbcPlus {
     }
 
 
-    public JdbcPlus() {
-        EntityMapperFactory.setJdbcPlus(this);
-    }
-
     public JdbcTemplate getJdbcTemplate() {
         return jdbcTemplate;
     }

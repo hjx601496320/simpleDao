@@ -44,17 +44,6 @@ public class DefaultInsert extends AbstractSqlMaker implements Insert {
         for (Map.Entry<String, Field> stringFieldEntry : columnFieldMapper.entrySet()) {
             Field field = stringFieldEntry.getValue();
             Object value = ClassUtils.getValue(entity, field);
-            if (value == null) {
-                continue;
-            }
-            if (EntityUtils.isJoinColumn(field)) {
-                //找到对应关联对象中的相应属性的值
-                Field fkTargetField = EntityUtils.getEntityFkTargetField(field);
-                value = ClassUtils.getValue(value, fkTargetField);
-                if (value == null) {
-                    continue;
-                }
-            }
             insertColumns.add(StringUtils.sqlColumn(stringFieldEntry.getKey()));
             insertColumnValues.add(value);
         }
