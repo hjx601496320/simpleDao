@@ -66,9 +66,9 @@ public class DefaultUpdate extends AbstractSqlMaker implements Update {
         for (int i = 0; i < updataColumn.size(); i++) {
             String column = StringUtils.sqlColumn(updataColumn.get(i));
             if (i == 0) {
-                sql.append(StringUtils.append(column, " = ? "));
+                sql.append(StringUtils.append(column, StringUtils.EQ));
             } else {
-                sql.append(StringUtils.append(", ", column, " = ? "));
+                sql.append(StringUtils.append(StringUtils.COMMA, column, StringUtils.EQ));
             }
         }
         sql.append(sqlWhere());

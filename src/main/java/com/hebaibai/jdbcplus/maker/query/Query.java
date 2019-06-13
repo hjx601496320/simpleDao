@@ -11,6 +11,14 @@ import java.util.List;
  */
 public interface Query extends SqlMaker {
 
+    /**
+     * 排序条件
+     */
+    enum Order {
+        DESC,
+        ASC
+    }
+
     void addQueryColumns(List<String> selectColumns);
 
     /**
@@ -20,7 +28,7 @@ public interface Query extends SqlMaker {
      * @param type:   ASC/DESC
      * @return
      */
-    Query orderBy(String orderBy, String type);
+    Query orderBy(Query.Order type, String... orderBy);
 
     /**
      * limit
@@ -30,5 +38,7 @@ public interface Query extends SqlMaker {
      * @return
      */
     Query limit(int line, int num);
+
+    Query groupBy(String s);
 
 }

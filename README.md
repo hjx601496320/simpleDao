@@ -157,49 +157,6 @@ jdbcPlus.selectBy(User.class, "user_name", "123");
 jdbcPlus.selectBy( User.class, "name", "123", "age", "18" );
 ```
 
-#### 对象关联查询
-
-需要对 **表** 和 **实体类** 做出如下修改：
-
-1：修改 **user** 表。添加 **parent_id**字段，值为user表的的id，表示上级用户。（**不需要外键支持**）
-
-```sql
--- auto-generated definition
-create table user (
-  id          int auto_increment comment '用户id' primary key,
-  name        varchar(225) null  comment '用户名',
-  create_date datetime     null,
-  status      int          null,
-  age         int          null  comment '年龄',
-  mark        varchar(225) null,
-  big         decimal      null,
-  parent_id   int          null
-) comment '用户表';
-```
-
-2：修改 **User.class** 对象，添加属性
-
-**@FK("id")** 表示字段关联到 **user** 表的 id字段。
-
-```java
-    /**
-     * parent_id
-     */
-    @Column("parent_id")
-    @FK("id")
-    private User parentId;
-```
-
-3：查询代码
-
-```java
-//查询id是2的user
-User user = jdbcPlus.selectById(User.class, 2);
-//使用get方法将关联的user查询出来（只有在执行get时才执行查询，只执行一次）
-User parent = user.getParentId();
-System.out.println(parent);
-```
-
 #### 执行sql查询
 
 ```java

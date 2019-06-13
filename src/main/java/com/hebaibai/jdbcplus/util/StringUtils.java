@@ -18,6 +18,8 @@ public class StringUtils {
 
     public static final String COMMA = ", ";
 
+    public static final String EQ = " = ? ";
+
     /**
      * 将字段添加``，防止因为sql字段是关键字造成的操作失败
      *

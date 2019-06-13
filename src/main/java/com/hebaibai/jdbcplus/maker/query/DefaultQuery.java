@@ -4,7 +4,6 @@ import com.hebaibai.jdbcplus.AbstractSqlMaker;
 import com.hebaibai.jdbcplus.EntityTableRowMapper;
 import com.hebaibai.jdbcplus.util.StringUtils;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,6 +18,7 @@ public class DefaultQuery extends AbstractSqlMaker implements Query {
 
     private String sqlLimit = StringUtils.BLANK;
     private String sqlOrderBy = StringUtils.BLANK;
+    private String sqlGroupBy = StringUtils.BLANK;
 
     /**
      * 要查询作为结果的字段
@@ -44,19 +44,26 @@ public class DefaultQuery extends AbstractSqlMaker implements Query {
     }
 
     @Override
-    public Query orderBy(String orderBy, String type) {
-        String[] split = orderBy.split(",");
-        for (int i = 0; i < split.length; i++) {
-            split[i] = getColumnName(split[i].trim());
+    public Query orderBy(Query.Order type, String... orderBy) {
+        String[] columns = new String[orderBy.length];
+        for (int i = 0; i < orderBy.length; i++) {
+            columns[i] = getColumnName(orderBy[i]);
         }
-        sqlOrderBy = StringUtils.append("ORDER BY ", StringUtils.join(Arrays.asList(split), StringUtils.COMMA),
-                StringUtils.SPACE + type + StringUtils.SPACE);
+        sqlOrderBy = " ORDER BY " +
+                StringUtils.join(Arrays.asList(columns), StringUtils.COMMA) +
+                StringUtils.SPACE + type.name();
         return this;
     }
 
     @Override
     public Query limit(int line, int num) {
-        this.sqlLimit = StringUtils.append("LIMIT ", line, StringUtils.COMMA + num + StringUtils.SPACE);
+        this.sqlLimit = " LIMIT " + line + StringUtils.COMMA + num + StringUtils.SPACE;
+        return this;
+    }
+
+    @Override
+    public Query groupBy(String column) {
+        this.sqlGroupBy = " GROUP BY " + column;
         return this;
     }
 
@@ -73,11 +80,14 @@ public class DefaultQuery extends AbstractSqlMaker implements Query {
                 selectColumns.add(StringUtils.sqlColumn(columnName));
             }
         }
-        sql.append(MessageFormat.format("SELECT {0} FROM {1} ",
-                StringUtils.join(selectColumns, StringUtils.COMMA), getTableName()));
-        sql.append(sqlWhere());
-        sql.append(sqlOrderBy);
-        sql.append(sqlLimit);
+        sql.append("SELECT ")
+                .append(StringUtils.join(selectColumns, StringUtils.COMMA))
+                .append(" FROM ").append(StringUtils.SPACE)
+                .append(getTableName())
+                .append(sqlWhere())
+                .append(sqlGroupBy)
+                .append(sqlOrderBy)
+                .append(sqlLimit);
         return sql.toString();
     }
 

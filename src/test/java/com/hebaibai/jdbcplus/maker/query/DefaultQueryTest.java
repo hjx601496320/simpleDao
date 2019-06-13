@@ -28,7 +28,7 @@ public class DefaultQueryTest {
     public void orderBy() {
         DefaultQuery query = new DefaultQuery();
         query.target(User.class);
-        query.orderBy("name ,  age", "DESC");
+        query.orderBy(Query.Order.DESC, "name", "age");
         String sql = query.toSql();
         System.out.println(sql);
         System.out.println(Arrays.toString(query.getSqlValues()));
@@ -39,7 +39,7 @@ public class DefaultQueryTest {
         DefaultQuery query = new DefaultQuery();
         query.target(User.class);
         query.limit(0, 10);
-        query.orderBy("name,age", "DESC");
+        query.orderBy(Query.Order.DESC, "name", "age");
         System.out.println(query.toSql());
         System.out.println(Arrays.toString(query.getSqlValues()));
 
@@ -50,9 +50,24 @@ public class DefaultQueryTest {
         DefaultQuery query = new DefaultQuery();
         query.target(User.class);
         query.limit(0, 10);
-        query.orderBy("user_name,age", "DESC");
+        query.orderBy(Query.Order.DESC, "name", "age");
         query.where(
-                Wheres.equal("user_name", "hebaiabi"),
+                Wheres.equal("name", "hebaiabi"),
+                Wheres.less("age", 13, true).or()
+        );
+        System.out.println(query.toSql());
+        System.out.println(Arrays.toString(query.getSqlValues()));
+    }
+
+    @Test
+    public void groupBy() {
+        DefaultQuery query = new DefaultQuery();
+        query.target(User.class);
+        query.limit(0, 10);
+        query.groupBy("name");
+        query.orderBy(Query.Order.DESC, "name", "age");
+        query.where(
+                Wheres.equal("name", "hebaiabi"),
                 Wheres.less("age", 13, true).or()
         );
         System.out.println(query.toSql());

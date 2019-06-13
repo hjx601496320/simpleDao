@@ -174,7 +174,7 @@ public abstract class AbstractSqlMaker implements SqlMaker {
     final protected String sqlWhere() {
         StringBuilder sql = new StringBuilder();
         if (wheres.size() != 0) {
-            sql.append("WHERE ");
+            sql.append(" WHERE ");
             for (int i = 0; i < wheres.size(); i++) {
                 Where where = wheres.get(i);
                 if (i != 0) {

@@ -15,6 +15,7 @@ import java.util.*;
 
 public class JdbcPlusTest extends JdbcTest {
 
+
     @Test
     public void insertBatch() {
         long l = System.currentTimeMillis();
