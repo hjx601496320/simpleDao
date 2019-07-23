@@ -1,4 +1,4 @@
-package com.hebaibai.jdbcplus;
+package com.hebaibai.jdbcplus.mapper;
 
 import com.hebaibai.jdbcplus.util.EntityUtils;
 import lombok.experimental.UtilityClass;
@@ -16,7 +16,7 @@ import java.util.Set;
  * @author hjx
  */
 @UtilityClass
-class EntityMapperFactory {
+public class EntityMapperFactory {
 
     /**
      * mapper 的 缓存

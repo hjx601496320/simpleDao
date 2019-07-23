@@ -1,6 +1,6 @@
 package com.hebaibai.jdbcplus.maker.update;
 
-import com.hebaibai.jdbcplus.AbstractSqlMaker;
+import com.hebaibai.jdbcplus.maker.AbstractSqlMaker;
 import com.hebaibai.jdbcplus.util.ClassUtils;
 import com.hebaibai.jdbcplus.util.StringUtils;
 import org.springframework.util.Assert;

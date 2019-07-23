@@ -1,5 +1,6 @@
-package com.hebaibai.jdbcplus;
+package com.hebaibai.jdbcplus.mapper;
 
+import com.hebaibai.jdbcplus.JdbcPlus;
 import com.hebaibai.jdbcplus.mapper.PlusColumnMapRowMapper;
 import com.hebaibai.jdbcplus.util.ClassUtils;
 import com.hebaibai.jdbcplus.util.EntityUtils;

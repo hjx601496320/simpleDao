@@ -1,7 +1,7 @@
 package com.hebaibai.jdbcplus.maker.delete;
 
 import com.hebaibai.jdbcplus.util.StringUtils;
-import com.hebaibai.jdbcplus.AbstractSqlMaker;
+import com.hebaibai.jdbcplus.maker.AbstractSqlMaker;
 
 import java.util.Arrays;
 import java.util.List;

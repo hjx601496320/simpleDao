@@ -10,6 +10,8 @@ import com.hebaibai.jdbcplus.maker.query.DefaultQuery;
 import com.hebaibai.jdbcplus.maker.query.Query;
 import com.hebaibai.jdbcplus.maker.update.DefaultUpdate;
 import com.hebaibai.jdbcplus.maker.update.Update;
+import com.hebaibai.jdbcplus.mapper.EntityMapperFactory;
+import com.hebaibai.jdbcplus.mapper.EntityTableRowMapper;
 import com.hebaibai.jdbcplus.mapper.FieldColumnRowMapper;
 import com.hebaibai.jdbcplus.util.ClassUtils;
 import com.hebaibai.jdbcplus.util.EntityUtils;

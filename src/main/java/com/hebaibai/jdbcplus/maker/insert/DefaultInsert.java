@@ -1,10 +1,9 @@
 package com.hebaibai.jdbcplus.maker.insert;
 
-import com.hebaibai.jdbcplus.AbstractSqlMaker;
+import com.hebaibai.jdbcplus.maker.AbstractSqlMaker;
 import com.hebaibai.jdbcplus.maker.SqlMaker;
 import com.hebaibai.jdbcplus.maker.Where;
 import com.hebaibai.jdbcplus.util.ClassUtils;
-import com.hebaibai.jdbcplus.util.EntityUtils;
 import com.hebaibai.jdbcplus.util.StringUtils;
 import org.springframework.util.Assert;
 
