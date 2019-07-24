@@ -36,6 +36,33 @@ public class JdbcPlus {
 
 
     /**
+     * 根据条件查询
+     *
+     * @param entityClass
+     * @param wheres
+     * @param <T>
+     * @return
+     */
+    final public <T> List<T> selectBy(final Class<T> entityClass, Where... wheres) {
+        Query query = new DefaultQuery();
+        query.target(entityClass);
+        query.where(wheres);
+        return selectBy(query);
+    }
+
+    /**
+     * 根据条件查询一个
+     *
+     * @param entityClass
+     * @param wheres
+     * @param <T>
+     * @return
+     */
+    final public <T> T selectOneBy(final Class<T> entityClass, Where... wheres) {
+        return DataAccessUtils.requiredSingleResult(selectBy(entityClass, wheres));
+    }
+
+    /**
      * 查询所有
      *
      * @param entityClass
@@ -74,10 +101,7 @@ public class JdbcPlus {
             final Class<T> entityClass,
             final String columnName, final Object columnValue
     ) {
-        Query query = new DefaultQuery();
-        query.target(entityClass);
-        query.where(Wheres.equal(columnName, columnValue));
-        return selectBy(query);
+        return selectBy(entityClass, Wheres.equal(columnName, columnValue));
     }
 
     /**
@@ -96,13 +120,10 @@ public class JdbcPlus {
             final String columnName1, final Object columnValue1,
             final String columnName2, final Object columnValue2
     ) {
-        Query query = new DefaultQuery();
-        query.target(entityClass);
-        query.where(
+        return selectBy(entityClass,
                 Wheres.equal(columnName1, columnValue1),
                 Wheres.equal(columnName2, columnValue2)
         );
-        return selectBy(query);
     }
 
     /**
@@ -118,10 +139,7 @@ public class JdbcPlus {
             final Class<T> entityClass,
             final String columnName, final Object columnValue
     ) {
-        Query query = new DefaultQuery();
-        query.target(entityClass);
-        query.where(Wheres.equal(columnName, columnValue));
-        return selectOneBy(query);
+        return DataAccessUtils.requiredSingleResult(selectBy(entityClass, columnName, columnValue));
     }
 
     /**
@@ -140,13 +158,7 @@ public class JdbcPlus {
             final String columnName1, final Object columnValue1,
             final String columnName2, final Object columnValue2
     ) {
-        Query query = new DefaultQuery();
-        query.target(entityClass);
-        query.where(
-                Wheres.equal(columnName1, columnValue1),
-                Wheres.equal(columnName2, columnValue2)
-        );
-        return selectOneBy(query);
+        return selectOneBy(entityClass, columnName1, columnValue1, columnName2, columnValue2);
     }
 
     /**
@@ -219,6 +231,20 @@ public class JdbcPlus {
     }
 
     /**
+     * 根据条件删除数据
+     *
+     * @param entityClass
+     * @param wheres
+     * @return
+     */
+    final public Integer deleteBy(final Class entityClass, Where... wheres) {
+        Delete delete = new DefaultDelete();
+        delete.target(entityClass);
+        delete.where(wheres);
+        return deleteBy(delete);
+    }
+
+    /**
      * 根据id删除数据
      *
      * @param entityClass
@@ -239,10 +265,7 @@ public class JdbcPlus {
      * @return
      */
     final public Integer deleteBy(final Class entityClass, final String columnName, final Object columnValue) {
-        Delete delete = new DefaultDelete();
-        delete.target(entityClass);
-        delete.where(Wheres.equal(columnName, columnValue));
-        return deleteBy(delete);
+        return deleteBy(entityClass, Wheres.equal(columnName, columnValue));
     }
 
     /**
@@ -260,13 +283,7 @@ public class JdbcPlus {
             final String columnName1, final Object columnValue1,
             final String columnName2, final Object columnValue2
     ) {
-        Delete delete = new DefaultDelete();
-        delete.target(entityClass);
-        delete.where(
-                Wheres.equal(columnName1, columnValue1),
-                Wheres.equal(columnName2, columnValue2)
-        );
-        return deleteBy(delete);
+        return deleteBy(entityClass, Wheres.equal(columnName1, columnValue1), Wheres.equal(columnName2, columnValue2));
     }
 
     /**
@@ -399,7 +416,6 @@ public class JdbcPlus {
         }
         return jdbcTemplate.query(sql, sqlValues, mapper);
     }
-
 
     public JdbcTemplate getJdbcTemplate() {
         return jdbcTemplate;

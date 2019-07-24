@@ -81,10 +81,8 @@ public class ClassUtils {
         Assert.notNull(target);
         Assert.notNull(field);
         boolean accessible = field.isAccessible();
-        if (!accessible) {
-            field.setAccessible(true);
-        }
         try {
+            field.setAccessible(true);
             field.set(target, value);
             return true;
         } catch (IllegalAccessException e) {
